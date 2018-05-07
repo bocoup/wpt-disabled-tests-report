@@ -9,6 +9,9 @@ from datetime import date
 mozillaURL = "https://searchfox.org/mozilla-central/search?q=disabled%3A&case=true&regexp=false&path=testing%2Fweb-platform%2Fmeta"
 chromiumURL = "https://cs.chromium.org/codesearch/f/chromium/src/third_party/WebKit/LayoutTests/TestExpectations"
 webkitURL = "https://raw.githubusercontent.com/WebKit/webkit/master/LayoutTests/TestExpectations"
+flakyQuery = "q=is%3Aissue+is%3Aopen+label%3Aflaky"
+wptAPIURL = "https://api.github.com/search/issues?" + flakyQuery + "+repo%3Aw3c/web-platform-tests"
+wptHTMLURL = "https://github.com/w3c/web-platform-tests/issues?utf8=%E2%9C%93&" + flakyQuery
 
 # Mozilla
 contents = urllib.request.urlopen(mozillaURL).readlines()
@@ -77,6 +80,16 @@ extractFromTestExpectations(webkitURL,
                             b"imported/w3c/web-platform-tests",
                             "webkit")
 
+# web-platform-tests issues
+wptIssues = json.loads(urllib.request.urlopen(wptAPIURL).read())["items"]
+for item in wptIssues:
+    match = re.search(r"^(/[^ ]+) is (?:disabled|flaky|slow)", item["title"])
+    if match == None:
+        continue
+    bug = item["html_url"][len("https://"):]
+    path = match.group(1)
+    addPath(bug, path, None, "web-platform-tests")
+
 # Output json file
 with open('common.json', 'w') as out:
     out.write(json.dumps(common))
@@ -105,7 +118,7 @@ html = Template("""<!doctype html>
 <p>A <dfn>flaky</dfn> test is a test that gives inconsistent results, e.g., sometimes passing and sometimes failing. For Chromium and WebKit, this is denoted as "[&nbsp;Pass&nbsp;Failure&nbsp;]" (or other combinations of results).
 <p>A <dfn>slow</dfn> test is a test that is marked as taking a long time to run. For Chromium and WebKit, this is denoted as "[&nbsp;Slow&nbsp;]".
 <p>The tables below show all tests in <a href="https://github.com/w3c/web-platform-tests">web-platform-tests</a> that are disabled, flaky, or slow, in 3, 2, and 1 browsers. Tests that show up for more than one browser are likely to be due to issues with the tests.
-<p>This report is generated from <a href="$mozillaURL">this search result for Mozilla</a>, <a href="$chromiumURL">this TestExpectations file for Chromium</a>, and <a href="$webkitURL">this TestExpectations file for WebKit</a>.</p>
+<p>This report is generated from <a href="$mozillaURL">this search result for Mozilla</a>, <a href="$chromiumURL">this TestExpectations file for Chromium</a>, <a href="$webkitURL">this TestExpectations file for WebKit</a>, and <a href="$wptHTMLURL">this search result in web-platform-tests</a>.</p>
 <p>Generated on $date. <a href="https://github.com/bocoup/wpt-disabled-tests-report">Source on GitHub</a> (<a href="https://github.com/bocoup/wpt-disabled-tests-report/issues">issues/feedback</a>). Data is also available in <a href="common.json">JSON format</a>.</p>
 <h2>3 browsers ($numRows3 tests)</h2>
 <table>
@@ -142,29 +155,37 @@ def link(url):
 def linkWPTFYI(path):
     return "<a href='https://wpt.fyi%s'>%s</a>" % (path, path)
 
+def stringify(item, products, property):
+    arr = []
+    for product in products:
+        if property == "bug":
+            arr.append(link(item[product][property]))
+        else:
+            arr.append(item[product][property])
+    if property == "bug":
+        if "web-platform-tests" in item:
+            arr.append(link(item["web-platform-tests"][property]))
+    return "<br>".join(arr)
+
 for item in common:
     products = getProducts(item)
     num = len(products)
+    row = rowTemplate.substitute(bugs=stringify(item, products, "bug"),
+                                 path=linkWPTFYI(item["path"]),
+                                 products="<br>".join(products),
+                                 results=stringify(item, products, "results"))
     if num == 3:
-        foundIn3.append(rowTemplate.substitute(bugs="<br>".join([link(item["mozilla"]["bug"]), link(item["chromium"]["bug"]), link(item["webkit"]["bug"])]),
-                                               path=linkWPTFYI(item["path"]),
-                                               products="<br>".join(products),
-                                               results="<br>".join([item["mozilla"]["results"], item["chromium"]["results"], item["webkit"]["results"]])))
+        foundIn3.append(row)
     if num == 2:
-        foundIn2.append(rowTemplate.substitute(bugs="<br>".join([link(item[products[0]]["bug"]), link(item[products[1]]["bug"])]),
-                                               path=linkWPTFYI(item["path"]),
-                                               products="<br>".join(products),
-                                               results="<br>".join([item[products[0]]["results"], item[products[1]]["results"]])))
+        foundIn2.append(row)
     if num == 1:
-        foundIn1.append(rowTemplate.substitute(bugs=link(item[products[0]]["bug"]),
-                                               path=linkWPTFYI(item["path"]),
-                                               products=products[0],
-                                               results=item[products[0]]["results"]))
+        foundIn1.append(row)
 
 outHTML = html.substitute(title="Disabled/flaky/slow web-platform-tests Report",
                           mozillaURL=mozillaURL,
                           chromiumURL=chromiumURL,
                           webkitURL=webkitURL,
+                          wptHTMLURL=wptHTMLURL,
                           date=todayStr,
                           thead=theadStr,
                           numRows3=str(len(foundIn3)),
