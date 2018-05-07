@@ -65,8 +65,10 @@ def extractFromTestExpectations(url, wptPrefix, product):
             bug = match.group(1)
             path = match.group(2)
             results = match.group(3)
+            # Remove tags we're not interested in
+            results = results.replace(" DumpJSConsoleLogInStdErr", "").replace(" ImageOnly", "")
             # Don't collect stable but failing tests
-            if results == "[ Failure ]":
+            if results == "[ Failure ]" or results == "[ ]":
                 continue
             addPath(bug, path, results, product)
 
@@ -97,12 +99,17 @@ with open('common.json', 'w') as out:
 # Output HTML file
 foundIn3 = []
 foundIn2 = []
-foundIn1 = []
+flakyRows = []
+slowRows = []
+timeoutRows = []
+disabledRows = []
+
 html = Template("""<!doctype html>
 <meta charset=utf-8>
 <title>$title</title>
 <style>
  html { font-family: sans-serif; line-height: 1.5; background: white; color: black }
+ body { margin-bottom: 50vh }
  p { margin: 0 40px; padding: 0.5em; background-color: #fdd73d; max-width: 55em }
  h1 { background-color: #eaeaea; font-size: 1.5em; font-weight: normal }
  img { padding: 10px 50px; vertical-align: -16px }
@@ -131,10 +138,34 @@ $thead
 $rows2
 </table>
 <h2>1 browser ($numRows1 tests)</h2>
+<details>
+<summary>Flaky tests ($flakyNum)</summary>
 <table>
 $thead
-$rows1
+$flakyRows
 </table>
+</details>
+<details>
+<summary>Slow tests ($slowNum)</summary>
+<table>
+$thead
+$slowRows
+</table>
+</details>
+<details>
+<summary>Timeout tests ($timeoutNum)</summary>
+<table>
+$thead
+$timeoutRows
+</table>
+</details>
+<details>
+<summary>Disabled tests ($disabledNum)</summary>
+<table>
+$thead
+$disabledRows
+</table>
+</details>
 """)
 todayStr = date.today().isoformat()
 theadStr = "<tr><th>Path<th>Products<th>Results<th>Bugs"
@@ -179,7 +210,24 @@ for item in common:
     if num == 2:
         foundIn2.append(row)
     if num == 1:
-        foundIn1.append(row)
+        match = re.search(r"(\[ (Slow|Timeout|Skip) \]|disabled)", item[products[0]]["results"])
+        if match:
+            if match.group(0) == "[ Slow ]":
+                slowRows.append(row)
+            elif match.group(0) == "[ Timeout ]":
+                timeoutRows.append(row)
+            elif match.group(0) == "disabled" or match.group(0) == "[ Skip ]":
+                disabledRows.append(row)
+            else:
+               raise Exception(row)
+        else:
+            flakyRows.append(row)
+
+flakyNum = len(flakyRows)
+slowNum = len(slowRows)
+timeoutNum = len(timeoutRows)
+disabledNum = len(disabledRows)
+numRows1 = flakyNum + slowNum + timeoutNum + disabledNum
 
 outHTML = html.substitute(title="Disabled/flaky/slow web-platform-tests Report",
                           mozillaURL=mozillaURL,
@@ -192,8 +240,15 @@ outHTML = html.substitute(title="Disabled/flaky/slow web-platform-tests Report",
                           rows3="\n".join(foundIn3),
                           numRows2=str(len(foundIn2)),
                           rows2="\n".join(foundIn2),
-                          numRows1=str(len(foundIn1)),
-                          rows1="\n".join(foundIn1)
+                          numRows1=str(numRows1),
+                          flakyNum=str(flakyNum),
+                          flakyRows="\n".join(flakyRows),
+                          slowNum=str(slowNum),
+                          slowRows="\n".join(slowRows),
+                          timeoutNum=str(timeoutNum),
+                          timeoutRows="\n".join(timeoutRows),
+                          disabledNum=str(disabledNum),
+                          disabledRows="\n".join(disabledRows),
                           )
 
 with open('index.html', 'w') as out:
