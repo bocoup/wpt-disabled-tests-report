@@ -66,7 +66,7 @@ def extractFromTestExpectations(url, wptPrefix, product):
             path = match.group(2)
             results = match.group(3)
             # Remove tags we're not interested in
-            results = results.replace(" DumpJSConsoleLogInStdErr", "").replace(" ImageOnly", "")
+            results = results.replace(" DumpJSConsoleLogInStdErr", "").replace("ImageOnly", "")
             # Don't collect stable but failing tests
             if results == "[ Failure ]" or results == "[ ]":
                 continue
