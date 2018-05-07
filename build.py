@@ -166,6 +166,17 @@ $thead
 $disabledRows
 </table>
 </details>
+<script>
+onpageshow = e => {
+  flakyDetails.open = sessionStorage.flakyDetailsOpen;
+  slowDetails.open = sessionStorage.slowDetailsOpen;
+  timeoutDetails.open = sessionStorage.timeoutDetailsOpen;
+  disabledDetails.open = sessionStorage.disabledDetailsOpen;
+}
+addEventListener('toggle', e => {
+  sessionStorage[e.target.id + "Open"] = e.target.open;
+}, true);
+</script>
 """)
 todayStr = date.today().isoformat()
 theadStr = "<tr><th>Path<th>Products<th>Results<th>Bugs"

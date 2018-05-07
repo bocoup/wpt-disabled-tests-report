@@ -1139,3 +1139,14 @@
 <tr><td><a href='https://wpt.fyi/service-workers/service-worker/navigation-redirect.https.html'>/service-workers/service-worker/navigation-redirect.https.html</a><td>webkit<td>[ Skip ]<td><a href='https://webkit.org/b/182311'>webkit.org/b/182311</a>
 </table>
 </details>
+<script>
+onpageshow = e => {
+  flakyDetails.open = sessionStorage.flakyDetailsOpen;
+  slowDetails.open = sessionStorage.slowDetailsOpen;
+  timeoutDetails.open = sessionStorage.timeoutDetailsOpen;
+  disabledDetails.open = sessionStorage.disabledDetailsOpen;
+}
+addEventListener('toggle', e => {
+  sessionStorage[e.target.id + "Open"] = e.target.open;
+}, true);
+</script>
