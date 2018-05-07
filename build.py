@@ -41,6 +41,8 @@ for item in common:
 
 # Add path to common, merging with existing if present
 def addPath(bug, path, results, product):
+    if path[0] != "/":
+        path = "/" + path
     pathFound = False
     for item in common:
         if item["path"] == path:
