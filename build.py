@@ -122,7 +122,6 @@ $rows2
 $thead
 $rows1
 </table>
-</details>
 """)
 todayStr = date.today().isoformat()
 theadStr = "<tr><th>Path<th>Products<th>Results<th>Bugs"
@@ -169,11 +168,11 @@ outHTML = html.substitute(title="Disabled/flaky/slow web-platform-tests Report",
                           date=todayStr,
                           thead=theadStr,
                           numRows3=str(len(foundIn3)),
-                          rows3="".join(foundIn3),
+                          rows3="\n".join(foundIn3),
                           numRows2=str(len(foundIn2)),
-                          rows2="".join(foundIn2),
+                          rows2="\n".join(foundIn2),
                           numRows1=str(len(foundIn1)),
-                          rows1="".join(foundIn1)
+                          rows1="\n".join(foundIn1)
                           )
 
 with open('index.html', 'w') as out:
