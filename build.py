@@ -127,8 +127,9 @@ html = Template("""<!doctype html>
 <p>A <dfn>flaky</dfn> test is a test that gives inconsistent results, e.g., sometimes passing and sometimes failing. For Chromium and WebKit, this is denoted as "[&nbsp;Pass&nbsp;Failure&nbsp;]" (or other combinations of results).
 <p>A <dfn>slow</dfn> test is a test that is marked as taking a long time to run. For Chromium and WebKit, this is denoted as "[&nbsp;Slow&nbsp;]".
 <p>The tables below show all tests in <a href="https://github.com/w3c/web-platform-tests">web-platform-tests</a> that are disabled, flaky, or slow, in 3, 2, and 1 browsers. Tests that show up for more than one browser are likely to be due to issues with the tests.
-<p>This report is generated from <a href="$mozillaURL">this search result for Mozilla</a>, <a href="$chromiumURL">this TestExpectations file for Chromium</a>, <a href="$webkitURL">this TestExpectations file for WebKit</a>, and <a href="$wptHTMLURL">this search result in web-platform-tests</a>.</p>
-<p>Generated on $date. <a href="https://github.com/bocoup/wpt-disabled-tests-report">Source on GitHub</a> (<a href="https://github.com/bocoup/wpt-disabled-tests-report/issues">issues/feedback</a>). Data is also available in <a href="common.json">JSON format</a>.</p>
+<p>This report is generated from <a href="$mozillaURL">this search result for Mozilla</a>, <a href="$chromiumURL">this TestExpectations file for Chromium</a>, <a href="$webkitURL">this TestExpectations file for WebKit</a>, and <a href="$wptHTMLURL">this search result in web-platform-tests</a>.
+<p>Generated on $date. <a href="https://github.com/bocoup/wpt-disabled-tests-report">Source on GitHub</a> (<a href="https://github.com/bocoup/wpt-disabled-tests-report/issues">issues/feedback</a>). Data is also available in <a href="common.json">JSON format</a>.
+<p>There is also a <a href="graph.html">graph</a> showing changes of number of tests over time (<a href="data.csv">CSV format</a>).
 <h2 id="3-browsers">3 browsers ($numRows3 tests)</h2>
 <table>
 $thead
@@ -248,6 +249,8 @@ flakyNum = len(flakyRows)
 slowNum = len(slowRows)
 timeoutNum = len(timeoutRows)
 disabledNum = len(disabledRows)
+numRows3 = len(foundIn3)
+numRows2 = len(foundIn2)
 numRows1 = flakyNum + slowNum + timeoutNum + disabledNum
 
 outHTML = html.substitute(title="Disabled/flaky/slow web-platform-tests Report",
@@ -257,9 +260,9 @@ outHTML = html.substitute(title="Disabled/flaky/slow web-platform-tests Report",
                           wptHTMLURL=wptHTMLURL,
                           date=todayStr,
                           thead=theadStr,
-                          numRows3=str(len(foundIn3)),
+                          numRows3=str(numRows3),
                           rows3="\n".join(foundIn3),
-                          numRows2=str(len(foundIn2)),
+                          numRows2=str(numRows2),
                           rows2="\n".join(foundIn2),
                           numRows1=str(numRows1),
                           flakyNum=str(flakyNum),
@@ -274,3 +277,7 @@ outHTML = html.substitute(title="Disabled/flaky/slow web-platform-tests Report",
 
 with open('index.html', 'w') as out:
     out.write(outHTML)
+
+# Output CSV
+with open('data.csv', 'a') as out:
+    out.write((",".join([str(numRows3), str(numRows2), str(flakyNum), str(slowNum), str(timeoutNum), str(disabledNum)]) + "\n"))
