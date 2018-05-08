@@ -5,10 +5,13 @@ import json
 import re
 from string import Template
 from datetime import date
+import xlrd
 
 mozillaURL = "https://searchfox.org/mozilla-central/search?q=disabled%3A&case=true&regexp=false&path=testing%2Fweb-platform%2Fmeta"
 chromiumURL = "https://cs.chromium.org/codesearch/f/chromium/src/third_party/WebKit/LayoutTests/TestExpectations"
 webkitURL = "https://raw.githubusercontent.com/WebKit/webkit/master/LayoutTests/TestExpectations"
+edgeXLSXURL = "https://github.com/w3c/web-platform-tests/files/1984479/NotRunFiles.xlsx"
+edgeHTMLURL = "https://github.com/w3c/web-platform-tests/issues/10655#issuecomment-387434035"
 flakyQuery = "q=is%3Aissue+is%3Aopen+label%3Aflaky"
 wptAPIURL = "https://api.github.com/search/issues?" + flakyQuery + "+repo%3Aw3c/web-platform-tests"
 wptHTMLURL = "https://github.com/w3c/web-platform-tests/issues?utf8=%E2%9C%93&" + flakyQuery
@@ -84,6 +87,16 @@ extractFromTestExpectations(webkitURL,
                             b"imported/w3c/web-platform-tests",
                             "webkit")
 
+# EdgeHTML
+xlsx = urllib.request.urlopen(edgeXLSXURL).read()
+workbook = xlrd.open_workbook(filename="NotRunFiles.xlsx", file_contents=xlsx)
+sheet = workbook.sheet_by_name('NotRunFiles')
+for rownum in range(sheet.nrows):
+    # Skip the header row
+    if rownum == 0:
+        continue
+    addPath(None, "/" + "/".join(sheet.row_values(rownum)), "disabled", "edge")
+
 # web-platform-tests issues
 wptIssues = json.loads(urllib.request.urlopen(wptAPIURL).read())["items"]
 for item in wptIssues:
@@ -99,6 +112,7 @@ with open('common.json', 'w') as out:
     out.write(json.dumps(common))
 
 # Output HTML file
+foundIn4 = []
 foundIn3 = []
 foundIn2 = []
 flakyRows = []
@@ -123,13 +137,18 @@ html = Template("""<!doctype html>
  :link:hover, :visited:hover { text-decoration: underline }
 </style>
 <h1><a href="https://bocoup.com/"><img src="https://static.bocoup.com/assets/img/bocoup-logo@2x.png" alt="Bocoup" width=135 height=40></a> $title</h1>
-<p>A <dfn>disabled</dfn> test is a test that is not run, maybe because it is flaky or because the feature it is testing is not yet implemented. For WebKit and Chromium, this is denoted as "[&nbsp;Skip&nbsp;]". For Mozilla, this is denoted as "disabled".
+<p>A <dfn>disabled</dfn> test is a test that is not run, maybe because it is flaky or because the feature it is testing is not yet implemented. For WebKit and Chromium, this is denoted as "[&nbsp;Skip&nbsp;]". For Mozilla and Edge, this is denoted as "disabled".
 <p>A <dfn>flaky</dfn> test is a test that gives inconsistent results, e.g., sometimes passing and sometimes failing. For Chromium and WebKit, this is denoted as "[&nbsp;Pass&nbsp;Failure&nbsp;]" (or other combinations of results).
 <p>A <dfn>slow</dfn> test is a test that is marked as taking a long time to run. For Chromium and WebKit, this is denoted as "[&nbsp;Slow&nbsp;]".
-<p>The tables below show all tests in <a href="https://github.com/w3c/web-platform-tests">web-platform-tests</a> that are disabled, flaky, or slow, in 3, 2, and 1 browsers. Tests that show up for more than one browser are likely to be due to issues with the tests.
-<p>This report is generated from <a href="$mozillaURL">this search result for Mozilla</a>, <a href="$chromiumURL">this TestExpectations file for Chromium</a>, <a href="$webkitURL">this TestExpectations file for WebKit</a>, and <a href="$wptHTMLURL">this search result in web-platform-tests</a>.
+<p>The tables below show all tests in <a href="https://github.com/w3c/web-platform-tests">web-platform-tests</a> that are disabled, flaky, or slow, in 4, 3, 2, and 1 browsers. Tests that show up for more than one browser are likely to be due to issues with the tests.
+<p>This report is generated from <a href="$mozillaURL">this search result for Mozilla</a>, <a href="$chromiumURL">this TestExpectations file for Chromium</a>, <a href="$webkitURL">this TestExpectations file for WebKit</a>, <a href="$edgeHTMLURL">this FilesNotRun.xslx file for Edge</a>, and <a href="$wptHTMLURL">this search result in web-platform-tests</a>.
 <p>Generated on $date. <a href="https://github.com/bocoup/wpt-disabled-tests-report">Source on GitHub</a> (<a href="https://github.com/bocoup/wpt-disabled-tests-report/issues">issues/feedback</a>). Data is also available in <a href="common.json">JSON format</a>.
 <p>There is also a <a href="graph.html">graph</a> showing changes of number of tests over time (<a href="data.csv">CSV format</a>).
+<h2 id="4-browsers">4 browsers ($numRows4 tests)</h2>
+<table>
+$thead
+$rows4
+</table>
 <h2 id="3-browsers">3 browsers ($numRows3 tests)</h2>
 <table>
 $thead
@@ -195,7 +214,7 @@ rowTemplate = Template("<tr><td>$path<td>$products<td>$results<td>$bugs")
 
 def getProducts(item):
     products = []
-    for product in ("mozilla", "chromium", "webkit"):
+    for product in ("mozilla", "chromium", "webkit", "edge"):
         if product in item:
             products.append(product)
     return products
@@ -227,6 +246,8 @@ for item in common:
                                  path=linkWPTFYI(item["path"]),
                                  products="<br>".join(products),
                                  results=stringify(item, products, "results"))
+    if num == 4:
+        foundIn4.append(row)
     if num == 3:
         foundIn3.append(row)
     if num == 2:
@@ -249,6 +270,7 @@ flakyNum = len(flakyRows)
 slowNum = len(slowRows)
 timeoutNum = len(timeoutRows)
 disabledNum = len(disabledRows)
+numRows4 = len(foundIn4)
 numRows3 = len(foundIn3)
 numRows2 = len(foundIn2)
 numRows1 = flakyNum + slowNum + timeoutNum + disabledNum
@@ -257,9 +279,12 @@ outHTML = html.substitute(title="Disabled/flaky/slow web-platform-tests Report",
                           mozillaURL=mozillaURL,
                           chromiumURL=chromiumURL,
                           webkitURL=webkitURL,
+                          edgeHTMLURL=edgeHTMLURL,
                           wptHTMLURL=wptHTMLURL,
                           date=todayStr,
                           thead=theadStr,
+                          numRows4=str(numRows4),
+                          rows4="\n".join(foundIn4),
                           numRows3=str(numRows3),
                           rows3="\n".join(foundIn3),
                           numRows2=str(numRows2),
@@ -280,4 +305,4 @@ with open('index.html', 'w') as out:
 
 # Output CSV
 with open('data.csv', 'a') as out:
-    out.write((",".join([str(numRows3), str(numRows2), str(flakyNum), str(slowNum), str(timeoutNum), str(disabledNum)]) + "\n"))
+    out.write((",".join([str(numRows4), str(numRows3), str(numRows2), str(flakyNum), str(slowNum), str(timeoutNum), str(disabledNum)]) + "\n"))
