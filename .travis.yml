@@ -4,10 +4,8 @@ python:
 # command to build
 install:
   - pip3 install xlrd
-  - npm install chart-csv -g
 script:
   - python3 build.py
-  - cat data.csv | chart-csv > graph.html
 deploy:
   provider: pages
   skip-cleanup: true
