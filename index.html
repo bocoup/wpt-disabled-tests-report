@@ -20,7 +20,7 @@
 <p>A <dfn>slow</dfn> test is a test that is marked as taking a long time to run. For Chromium and WebKit, this is denoted as "[&nbsp;Slow&nbsp;]".
 <p>The tables below show all tests in <a href="https://github.com/w3c/web-platform-tests">web-platform-tests</a> that are disabled, flaky, or slow, in 4, 3, 2, and 1 browsers. Tests that show up for more than one browser are likely to be due to issues with the tests.
 <p>This report is generated from <a href="https://searchfox.org/mozilla-central/search?q=disabled%3A&case=true&regexp=false&path=testing%2Fweb-platform%2Fmeta">this search result for Mozilla</a>, <a href="https://cs.chromium.org/codesearch/f/chromium/src/third_party/WebKit/LayoutTests/TestExpectations">this TestExpectations file for Chromium</a>, <a href="https://raw.githubusercontent.com/WebKit/webkit/master/LayoutTests/TestExpectations">this TestExpectations file for WebKit</a>, <a href="https://github.com/w3c/web-platform-tests/issues/10655#issuecomment-387434035">this NotRunFiles.xslx file for Edge</a>, and <a href="https://github.com/w3c/web-platform-tests/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+label%3Aflaky">this search result in web-platform-tests</a>.
-<p>Generated on 2018-05-09. <a href="https://github.com/bocoup/wpt-disabled-tests-report">Source on GitHub</a> (<a href="https://github.com/bocoup/wpt-disabled-tests-report/issues">issues/feedback</a>). Data is also available in <a href="common.json">JSON format</a>.
+<p>Generated on 2018-05-11. <a href="https://github.com/bocoup/wpt-disabled-tests-report">Source on GitHub</a> (<a href="https://github.com/bocoup/wpt-disabled-tests-report/issues">issues/feedback</a>). Data is also available in <a href="common.json">JSON format</a>.
 <p>The graph below shows changes of number of tests over time (<a href="data.csv">CSV format</a>).</p>
 <!-- Graph is based on https://bl.ocks.org/mbostock/3884955 -->
 <svg width="960" height="500"></svg>
@@ -118,8 +118,8 @@ function type(d, _, columns) {
 <table>
 <tr><th>Path<th>Products<th>Results<th>Bugs
 <tr><td><a href='https://wpt.fyi/WebCryptoAPI/generateKey/test_successes_RSA-OAEP.https.html'>/WebCryptoAPI/generateKey/test_successes_RSA-OAEP.https.html</a><td>mozilla<br>chromium<br>webkit<td>  disabled<br>[ Pass Timeout ]<br>[ Pass Failure ]<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1279799'>bugzilla.mozilla.org/show_bug.cgi?id=1279799</a><br><a href='https://crbug.com/787971'>crbug.com/787971</a><br>None<br><a href='https://github.com/w3c/web-platform-tests/issues/10794'>github.com/w3c/web-platform-tests/issues/10794</a>
-<tr><td><a href='https://wpt.fyi/media-source/mediasource-activesourcebuffers.html'>/media-source/mediasource-activesourcebuffers.html</a><td>mozilla<br>chromium<br>edge<td>    disabled<br>[ Failure Pass ]<br>disabled<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1301409'>bugzilla.mozilla.org/show_bug.cgi?id=1301409</a><br><a href='https://crbug.com/715718'>crbug.com/715718</a><br>None
-<tr><td><a href='https://wpt.fyi/media-source/mediasource-duration.html'>/media-source/mediasource-duration.html</a><td>mozilla<br>chromium<br>edge<td>  disabled<br>[ Failure Pass ]<br>disabled<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1154016'>bugzilla.mozilla.org/show_bug.cgi?id=1154016</a><br><a href='https://crbug.com/689781'>crbug.com/689781</a><br>None
+<tr><td><a href='https://wpt.fyi/media-source/mediasource-activesourcebuffers.html'>/media-source/mediasource-activesourcebuffers.html</a><td>mozilla<br>chromium<br>edge<td>    disabled<br>[ Failure Pass ]<br>disabled<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1301409'>bugzilla.mozilla.org/show_bug.cgi?id=1301409</a><br><a href='https://crbug.com/715718'>crbug.com/715718</a><br>None<br><a href='https://github.com/w3c/web-platform-tests/issues/10919'>github.com/w3c/web-platform-tests/issues/10919</a>
+<tr><td><a href='https://wpt.fyi/media-source/mediasource-duration.html'>/media-source/mediasource-duration.html</a><td>mozilla<br>chromium<br>edge<td>  disabled<br>[ Failure Pass ]<br>disabled<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1154016'>bugzilla.mozilla.org/show_bug.cgi?id=1154016</a><br><a href='https://crbug.com/689781'>crbug.com/689781</a><br>None<br><a href='https://github.com/w3c/web-platform-tests/issues/10920'>github.com/w3c/web-platform-tests/issues/10920</a>
 <tr><td><a href='https://wpt.fyi/resource-timing/resource-timing.html'>/resource-timing/resource-timing.html</a><td>mozilla<br>chromium<br>webkit<td>  disabled<br>[ Timeout Failure ]<br>[ Pass Failure ]<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1290858'>bugzilla.mozilla.org/show_bug.cgi?id=1290858</a><br><a href='https://crbug.com/626703'>crbug.com/626703</a><br><a href='https://webkit.org/b/161088'>webkit.org/b/161088</a><br><a href='https://github.com/w3c/web-platform-tests/issues/10798'>github.com/w3c/web-platform-tests/issues/10798</a>
 <tr><td><a href='https://wpt.fyi/workers/semantics/structured-clone/dedicated.html'>/workers/semantics/structured-clone/dedicated.html</a><td>mozilla<br>chromium<br>webkit<td>  disabled: true<br>[ Crash Failure Timeout ]<br>[ Skip ]<td>None<br><a href='https://crbug.com/655458'>crbug.com/655458</a><br>None<br><a href='https://github.com/w3c/web-platform-tests/issues/10799'>github.com/w3c/web-platform-tests/issues/10799</a>
 <tr><td><a href='https://wpt.fyi/workers/semantics/structured-clone/shared.html'>/workers/semantics/structured-clone/shared.html</a><td>mozilla<br>chromium<br>webkit<td>  disabled: true<br>[ Crash Failure Timeout ]<br>[ Skip ]<td>None<br><a href='https://crbug.com/655458'>crbug.com/655458</a><br>None
@@ -188,7 +188,7 @@ function type(d, _, columns) {
 <tr><td><a href='https://wpt.fyi/media-source/mediasource-sequencemode-append-buffer.html'>/media-source/mediasource-sequencemode-append-buffer.html</a><td>chromium<br>edge<td>[ Failure Pass ]<br>disabled<td><a href='https://crbug.com/807110'>crbug.com/807110</a><br>None
 <tr><td><a href='https://wpt.fyi/media-source/mediasource-sourcebuffer-mode-timestamps.html'>/media-source/mediasource-sourcebuffer-mode-timestamps.html</a><td>chromium<br>edge<td>[ Failure Pass ]<br>disabled<td><a href='https://crbug.com/807110'>crbug.com/807110</a><br>None
 </table>
-<h2 id="1-browser">1 browser (1107 tests)</h2>
+<h2 id="1-browser">1 browser (1109 tests)</h2>
 <details id="flaky-tests">
 <summary>Flaky tests (130)</summary>
 <table>
@@ -409,7 +409,7 @@ function type(d, _, columns) {
 </table>
 </details>
 <details id="disabled-tests">
-<summary>Disabled tests (906)</summary>
+<summary>Disabled tests (908)</summary>
 <table>
 <tr><th>Path<th>Products<th>Results<th>Bugs
 <tr><td><a href='https://wpt.fyi/2dcontext/building-paths/canvas_complexshapes_beziercurveto_001.htm'>/2dcontext/building-paths/canvas_complexshapes_beziercurveto_001.htm</a><td>mozilla<td>  disabled: if (os == "win") and (version == "10.0.15603")<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1372037'>bugzilla.mozilla.org/show_bug.cgi?id=1372037</a>
@@ -441,6 +441,7 @@ function type(d, _, columns) {
 <tr><td><a href='https://wpt.fyi/content-security-policy/navigate-to/child-navigates-parent-allowed.html'>/content-security-policy/navigate-to/child-navigates-parent-allowed.html</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/content-security-policy/navigate-to/link-click-blocked.html'>/content-security-policy/navigate-to/link-click-blocked.html</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/content-security-policy/navigate-to/link-click-redirected-allowed.html'>/content-security-policy/navigate-to/link-click-redirected-allowed.html</a><td>mozilla<td>  disabled:<td>None
+<tr><td><a href='https://wpt.fyi/content-security-policy/prefetch-src/prefetch-header-allowed.html'>/content-security-policy/prefetch-src/prefetch-header-allowed.html</a><td>mozilla<td>  disabled<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1455236'>bugzilla.mozilla.org/show_bug.cgi?id=1455236</a>
 <tr><td><a href='https://wpt.fyi/content-security-policy/reporting/multiple-report-policies.html'>/content-security-policy/reporting/multiple-report-policies.html</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/content-security-policy/script-src/script-src-1_2.html'>/content-security-policy/script-src/script-src-1_2.html</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/content-security-policy/script-src/script-src-1_2_1.html'>/content-security-policy/script-src/script-src-1_2_1.html</a><td>mozilla<td>  disabled:<td>None
@@ -669,6 +670,7 @@ function type(d, _, columns) {
 <tr><td><a href='https://wpt.fyi/html/dom/elements/requirements-relating-to-bidirectional-algorithm-formatting-characters/dir-isolation-009c.html'>/html/dom/elements/requirements-relating-to-bidirectional-algorithm-formatting-characters/dir-isolation-009c.html</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/html/editing/focus/focus-management/focus-event-targets-simple.html'>/html/editing/focus/focus-management/focus-event-targets-simple.html</a><td>mozilla<td>  disabled<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1252056'>bugzilla.mozilla.org/show_bug.cgi?id=1252056</a>
 <tr><td><a href='https://wpt.fyi/html/editing/focus/focus-management/focus-events.html'>/html/editing/focus/focus-management/focus-events.html</a><td>mozilla<td>  disabled:<td>None
+<tr><td><a href='https://wpt.fyi/html/rendering/replaced-elements/embedded-content/video-controls-vertical-writing-mode.html'>/html/rendering/replaced-elements/embedded-content/video-controls-vertical-writing-mode.html</a><td>mozilla<td>  disabled: wpt-sync Bug 1458750<td>None
 <tr><td><a href='https://wpt.fyi/html/semantics/document-metadata/the-meta-element/pragma-directives/attr-meta-http-equiv-refresh/parsing.html'>/html/semantics/document-metadata/the-meta-element/pragma-directives/attr-meta-http-equiv-refresh/parsing.html</a><td>mozilla<td>    disabled<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1230909'>bugzilla.mozilla.org/show_bug.cgi?id=1230909</a>
 <tr><td><a href='https://wpt.fyi/html/semantics/embedded-content/media-elements/loading-the-media-resource/resource-selection-candidate-moved.html'>/html/semantics/embedded-content/media-elements/loading-the-media-resource/resource-selection-candidate-moved.html</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/html/semantics/embedded-content/media-elements/track/track-element/cors/009.html'>/html/semantics/embedded-content/media-elements/track/track-element/cors/009.html</a><td>mozilla<td>    disabled<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1337242'>bugzilla.mozilla.org/show_bug.cgi?id=1337242</a>
@@ -749,15 +751,14 @@ function type(d, _, columns) {
 <tr><td><a href='https://wpt.fyi/webdriver/tests/actions/modifier_click.py'>/webdriver/tests/actions/modifier_click.py</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/webdriver/tests/actions/mouse_dblclick.py'>/webdriver/tests/actions/mouse_dblclick.py</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/webdriver/tests/actions/mouse_pause_dblclick.py'>/webdriver/tests/actions/mouse_pause_dblclick.py</a><td>mozilla<td>  disabled:<td>None
-<tr><td><a href='https://wpt.fyi/webdriver/tests/contexts/maximize_window.py'>/webdriver/tests/contexts/maximize_window.py</a><td>mozilla<td>  disabled:<td>None
-<tr><td><a href='https://wpt.fyi/webdriver/tests/element_retrieval/get_active_element.py'>/webdriver/tests/element_retrieval/get_active_element.py</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/webdriver/tests/execute_async_script/user_prompts.py'>/webdriver/tests/execute_async_script/user_prompts.py</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/webdriver/tests/execute_script/user_prompts.py'>/webdriver/tests/execute_script/user_prompts.py</a><td>mozilla<td>  disabled:<td>None
-<tr><td><a href='https://wpt.fyi/webdriver/tests/get_window_rect.py'>/webdriver/tests/get_window_rect.py</a><td>mozilla<td>  disabled:<td>None
-<tr><td><a href='https://wpt.fyi/webdriver/tests/minimize_window.py'>/webdriver/tests/minimize_window.py</a><td>mozilla<td>  disabled:<td>None
-<tr><td><a href='https://wpt.fyi/webdriver/tests/navigation/current_url.py'>/webdriver/tests/navigation/current_url.py</a><td>mozilla<td>  disabled:<td>None
-<tr><td><a href='https://wpt.fyi/webdriver/tests/navigation/get_title.py'>/webdriver/tests/navigation/get_title.py</a><td>mozilla<td>  disabled:<td>None
-<tr><td><a href='https://wpt.fyi/webdriver/tests/set_window_rect.py'>/webdriver/tests/set_window_rect.py</a><td>mozilla<td>    disabled:<td>None
+<tr><td><a href='https://wpt.fyi/webdriver/tests/get_active_element/user_prompts.py'>/webdriver/tests/get_active_element/user_prompts.py</a><td>mozilla<td>  disabled:<td>None
+<tr><td><a href='https://wpt.fyi/webdriver/tests/get_title/user_prompts.py'>/webdriver/tests/get_title/user_prompts.py</a><td>mozilla<td>  disabled:<td>None
+<tr><td><a href='https://wpt.fyi/webdriver/tests/get_window_rect/user_prompts.py'>/webdriver/tests/get_window_rect/user_prompts.py</a><td>mozilla<td>  disabled:<td>None
+<tr><td><a href='https://wpt.fyi/webdriver/tests/maximize_window/user_prompts.py'>/webdriver/tests/maximize_window/user_prompts.py</a><td>mozilla<td>  disabled:<td>None
+<tr><td><a href='https://wpt.fyi/webdriver/tests/minimize_window/user_prompts.py'>/webdriver/tests/minimize_window/user_prompts.py</a><td>mozilla<td>  disabled:<td>None
+<tr><td><a href='https://wpt.fyi/webdriver/tests/set_window_rect/set.py'>/webdriver/tests/set_window_rect/set.py</a><td>mozilla<td>    disabled:<td>None
 <tr><td><a href='https://wpt.fyi/webgl/__dir__'>/webgl/__dir__</a><td>mozilla<td>disabled<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1241943'>bugzilla.mozilla.org/show_bug.cgi?id=1241943</a>
 <tr><td><a href='https://wpt.fyi/webrtc/RTCDTMFSender-ontonechange.https.html'>/webrtc/RTCDTMFSender-ontonechange.https.html</a><td>mozilla<td>  disabled: if debug and not e10s and (os == "win") and (version == "6.1.7601") and (processor == "x86") and (bits == 32):<td>None
 <tr><td><a href='https://wpt.fyi/webrtc/RTCPeerConnection-addIceCandidate.html'>/webrtc/RTCPeerConnection-addIceCandidate.html</a><td>mozilla<td>    disabled<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1382972'>bugzilla.mozilla.org/show_bug.cgi?id=1382972</a>
@@ -885,6 +886,7 @@ function type(d, _, columns) {
 <tr><td><a href='https://wpt.fyi/css/css-ui/caret-color-006.html'>/css/css-ui/caret-color-006.html</a><td>chromium<td>[ Skip ]<td><a href='https://crbug.com/713587'>crbug.com/713587</a>
 <tr><td><a href='https://wpt.fyi/web-nfc/idlharness.https.html'>/web-nfc/idlharness.https.html</a><td>chromium<td>[ Skip ]<td><a href='https://crbug.com/626703'>crbug.com/626703</a>
 <tr><td><a href='https://wpt.fyi/acid/acid3/numbered-tests.html'>/acid/acid3/numbered-tests.html</a><td>chromium<td>[ Skip ]<td><a href='https://crbug.com/805463'>crbug.com/805463</a>
+<tr><td><a href='https://wpt.fyi/console/console-countReset-logging-manual.html'>/console/console-countReset-logging-manual.html</a><td>chromium<td>[ Skip ]<td><a href='https://crbug.com/626703'>crbug.com/626703</a>
 <tr><td><a href='https://wpt.fyi/service-workers/service-worker/fetch-event-is-reload-navigation-manual.https.html'>/service-workers/service-worker/fetch-event-is-reload-navigation-manual.https.html</a><td>chromium<td>[ Skip ]<td><a href='https://crbug.com/626703'>crbug.com/626703</a>
 <tr><td><a href='https://wpt.fyi/payment-request/PaymentRequestUpdateEvent/updateWith-incremental-update-manual.https.html'>/payment-request/PaymentRequestUpdateEvent/updateWith-incremental-update-manual.https.html</a><td>chromium<td>[ Skip ]<td><a href='https://crbug.com/626703'>crbug.com/626703</a>
 <tr><td><a href='https://wpt.fyi/mediacapture-streams/MediaStream-MediaElement-preload-none-manual.https.html'>/mediacapture-streams/MediaStream-MediaElement-preload-none-manual.https.html</a><td>chromium<td>[ Skip ]<td><a href='https://crbug.com/626703'>crbug.com/626703</a>
