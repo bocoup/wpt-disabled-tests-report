@@ -5,6 +5,11 @@ python:
 install:
   - pip3 install xlrd
 script:
+  # When cloning the repository, TravisCI uses `--shallow`, which implies
+  # `--single-branch`. The deployment branch must be fetched explicitly from a
+  # repository created in this way.
+  - git fetch origin gh-pages
+  - git checkout FETCH_HEAD -- data.csv
   - python3 build.py
 deploy:
   provider: pages
