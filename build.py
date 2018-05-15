@@ -135,6 +135,7 @@ html = Template("""<!doctype html>
  tr:nth-child(even) { background-color: #eaeaea }
  :link, :visited { text-decoration: none }
  :link:hover, :visited:hover { text-decoration: underline }
+ path { fill: none }
 </style>
 <h1><a href="https://bocoup.com/"><img src="https://static.bocoup.com/assets/img/bocoup-logo@2x.png" alt="Bocoup" width=135 height=40></a> $title</h1>
 <p>A <dfn>disabled</dfn> test is a test that is not run, maybe because it is flaky or because the feature it is testing is not yet implemented. For WebKit and Chromium, this is denoted as "[&nbsp;Skip&nbsp;]". For Mozilla and Edge, this is denoted as "disabled".
@@ -157,7 +158,7 @@ var svg = d3.select("svg"),
 var parseTime = d3.timeParse("%Y-%m-%d");
 
 var x = d3.scaleTime().range([0, width]),
-    y = d3.scaleLinear().range([height, 0]),
+    y = d3.scalePow().exponent(0.5).range([height, 0]),
     z = d3.scaleOrdinal(d3.schemeCategory10);
 
 var line = d3.line()
@@ -220,8 +221,9 @@ d3.csv("data.csv", type, function(error, data) {
 
   group.append("text")
       .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
-      .attr("transform", function(d) { return "translate(" + positionLegend() + ", " + y(d.value.tests + 15) + ")"; })
+      .attr("transform", function(d) { return "translate(" + positionLegend() + ", " + (y(d.value.tests) - 5) + ")"; })
       .style("font", "10px sans-serif")
+      .style("fill", function(d) { return z(d.id); })
       .text(function(d) { return d.id; });
 });
 
