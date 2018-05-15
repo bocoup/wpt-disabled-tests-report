@@ -13,6 +13,7 @@
  tr:nth-child(even) { background-color: #eaeaea }
  :link, :visited { text-decoration: none }
  :link:hover, :visited:hover { text-decoration: underline }
+ path { fill: none }
 </style>
 <h1><a href="https://bocoup.com/"><img src="https://static.bocoup.com/assets/img/bocoup-logo@2x.png" alt="Bocoup" width=135 height=40></a> Disabled/flaky/slow web-platform-tests Report</h1>
 <p>A <dfn>disabled</dfn> test is a test that is not run, maybe because it is flaky or because the feature it is testing is not yet implemented. For WebKit and Chromium, this is denoted as "[&nbsp;Skip&nbsp;]". For Mozilla and Edge, this is denoted as "disabled".
@@ -35,7 +36,7 @@ var svg = d3.select("svg"),
 var parseTime = d3.timeParse("%Y-%m-%d");
 
 var x = d3.scaleTime().range([0, width]),
-    y = d3.scaleLinear().range([height, 0]),
+    y = d3.scalePow().exponent(0.5).range([height, 0]),
     z = d3.scaleOrdinal(d3.schemeCategory10);
 
 var line = d3.line()
@@ -98,8 +99,9 @@ d3.csv("data.csv", type, function(error, data) {
 
   group.append("text")
       .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
-      .attr("transform", function(d) { return "translate(" + positionLegend() + ", " + y(d.value.tests + 15) + ")"; })
+      .attr("transform", function(d) { return "translate(" + positionLegend() + ", " + (y(d.value.tests) - 5) + ")"; })
       .style("font", "10px sans-serif")
+      .style("fill", function(d) { return z(d.id); })
       .text(function(d) { return d.id; });
 });
 
@@ -117,7 +119,7 @@ function type(d, _, columns) {
 <h2 id="3-browsers">3 browsers (6 tests)</h2>
 <table>
 <tr><th>Path<th>Products<th>Results<th>Bugs
-<tr><td><a href='https://wpt.fyi/WebCryptoAPI/generateKey/test_successes_RSA-OAEP.https.html'>/WebCryptoAPI/generateKey/test_successes_RSA-OAEP.https.html</a><td>mozilla<br>chromium<br>webkit<td>  disabled<br>[ Pass Timeout ]<br>[ Pass Failure ]<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1279799'>bugzilla.mozilla.org/show_bug.cgi?id=1279799</a><br><a href='https://crbug.com/787971'>crbug.com/787971</a><br>None<br><a href='https://github.com/w3c/web-platform-tests/issues/10794'>github.com/w3c/web-platform-tests/issues/10794</a>
+<tr><td><a href='https://wpt.fyi/WebCryptoAPI/generateKey/test_successes_RSA-OAEP.https.html'>/WebCryptoAPI/generateKey/test_successes_RSA-OAEP.https.html</a><td>mozilla<br>chromium<br>webkit<td>  disabled<br>[ Pass Timeout ]<br>[ Pass Failure ]<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1279799'>bugzilla.mozilla.org/show_bug.cgi?id=1279799</a><br><a href='https://crbug.com/787971'>crbug.com/787971</a><br>None
 <tr><td><a href='https://wpt.fyi/media-source/mediasource-activesourcebuffers.html'>/media-source/mediasource-activesourcebuffers.html</a><td>mozilla<br>chromium<br>edge<td>    disabled<br>[ Failure Pass ]<br>disabled<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1301409'>bugzilla.mozilla.org/show_bug.cgi?id=1301409</a><br><a href='https://crbug.com/715718'>crbug.com/715718</a><br>None<br><a href='https://github.com/w3c/web-platform-tests/issues/10919'>github.com/w3c/web-platform-tests/issues/10919</a>
 <tr><td><a href='https://wpt.fyi/media-source/mediasource-duration.html'>/media-source/mediasource-duration.html</a><td>mozilla<br>chromium<br>edge<td>  disabled<br>[ Failure Pass ]<br>disabled<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1154016'>bugzilla.mozilla.org/show_bug.cgi?id=1154016</a><br><a href='https://crbug.com/689781'>crbug.com/689781</a><br>None<br><a href='https://github.com/w3c/web-platform-tests/issues/10920'>github.com/w3c/web-platform-tests/issues/10920</a>
 <tr><td><a href='https://wpt.fyi/resource-timing/resource-timing.html'>/resource-timing/resource-timing.html</a><td>mozilla<br>chromium<br>webkit<td>  disabled<br>[ Timeout Failure ]<br>[ Pass Failure ]<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1290858'>bugzilla.mozilla.org/show_bug.cgi?id=1290858</a><br><a href='https://crbug.com/626703'>crbug.com/626703</a><br><a href='https://webkit.org/b/161088'>webkit.org/b/161088</a><br><a href='https://github.com/w3c/web-platform-tests/issues/10798'>github.com/w3c/web-platform-tests/issues/10798</a>
