@@ -12,7 +12,7 @@ chromiumURL = "https://cs.chromium.org/codesearch/f/chromium/src/third_party/Web
 webkitURL = "https://raw.githubusercontent.com/WebKit/webkit/master/LayoutTests/TestExpectations"
 edgeXLSXURL = "https://github.com/w3c/web-platform-tests/files/1984479/NotRunFiles.xlsx"
 edgeHTMLURL = "https://github.com/w3c/web-platform-tests/issues/10655#issuecomment-387434035"
-flakyQuery = "q=is%3Aissue+is%3Aopen+label%3Aflaky"
+flakyQuery = "q=is%3Aissue+label%3Aflaky"
 wptAPIURL = "https://api.github.com/search/issues?" + flakyQuery + "+repo%3Aw3c/web-platform-tests"
 wptHTMLURL = "https://github.com/w3c/web-platform-tests/issues?utf8=%E2%9C%93&" + flakyQuery
 
@@ -127,6 +127,8 @@ html = Template("""<!doctype html>
  html { font-family: sans-serif; line-height: 1.5; background: white; color: black }
  body { margin-bottom: 50vh }
  p { margin: 0 40px; padding: 0.5em; background-color: #fdd73d; max-width: 55em }
+ .gh-label { font-weight: bold; padding: 5px; border-radius: 3px }
+ .flaky.gh-label { background-color: #d93f0b; color: white }
  h1 { background-color: #eaeaea; font-size: 1.5em; font-weight: normal }
  img { padding: 10px 50px; vertical-align: -16px }
  table { border-collapse: collapse; width: 100% }
@@ -144,6 +146,7 @@ html = Template("""<!doctype html>
 <p>The tables below show all tests in <a href="https://github.com/w3c/web-platform-tests">web-platform-tests</a> that are disabled, flaky, or slow, in 4, 3, 2, and 1 browsers. Tests that show up for more than one browser are likely to be due to issues with the tests.
 <p>This report is generated from <a href="$mozillaURL">this search result for Mozilla</a>, <a href="$chromiumURL">this TestExpectations file for Chromium</a>, <a href="$webkitURL">this TestExpectations file for WebKit</a>, <a href="$edgeHTMLURL">this NotRunFiles.xslx file for Edge</a>, and <a href="$wptHTMLURL">this search result in web-platform-tests</a>.
 <p>Generated on $date. <a href="https://github.com/bocoup/wpt-disabled-tests-report">Source on GitHub</a> (<a href="https://github.com/bocoup/wpt-disabled-tests-report/issues">issues/feedback</a>). Data is also available in <a href="common.json">JSON format</a>.
+<p>Also see <a href="https://github.com/w3c/web-platform-tests/pulls?q=is%3Apr+label%3Aflaky">PRs with the <span class="flaky gh-label">flaky</span> label</a>, which represent work to fix tests in this report.
 <p>The graph below shows changes of number of tests over time (<a href="data.csv">CSV format</a>).</p>
 <!-- Graph is based on https://bl.ocks.org/mbostock/3884955 -->
 <svg width="960" height="500"></svg>

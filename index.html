@@ -5,6 +5,8 @@
  html { font-family: sans-serif; line-height: 1.5; background: white; color: black }
  body { margin-bottom: 50vh }
  p { margin: 0 40px; padding: 0.5em; background-color: #fdd73d; max-width: 55em }
+ .gh-label { font-weight: bold; padding: 5px; border-radius: 3px }
+ .flaky.gh-label { background-color: #d93f0b; color: white }
  h1 { background-color: #eaeaea; font-size: 1.5em; font-weight: normal }
  img { padding: 10px 50px; vertical-align: -16px }
  table { border-collapse: collapse; width: 100% }
@@ -20,8 +22,9 @@
 <p>A <dfn>flaky</dfn> test is a test that gives inconsistent results, e.g., sometimes passing and sometimes failing. For Chromium and WebKit, this is denoted as "[&nbsp;Pass&nbsp;Failure&nbsp;]" (or other combinations of results).
 <p>A <dfn>slow</dfn> test is a test that is marked as taking a long time to run. For Chromium and WebKit, this is denoted as "[&nbsp;Slow&nbsp;]".
 <p>The tables below show all tests in <a href="https://github.com/w3c/web-platform-tests">web-platform-tests</a> that are disabled, flaky, or slow, in 4, 3, 2, and 1 browsers. Tests that show up for more than one browser are likely to be due to issues with the tests.
-<p>This report is generated from <a href="https://searchfox.org/mozilla-central/search?q=disabled%3A&case=true&regexp=false&path=testing%2Fweb-platform%2Fmeta">this search result for Mozilla</a>, <a href="https://cs.chromium.org/codesearch/f/chromium/src/third_party/WebKit/LayoutTests/TestExpectations">this TestExpectations file for Chromium</a>, <a href="https://raw.githubusercontent.com/WebKit/webkit/master/LayoutTests/TestExpectations">this TestExpectations file for WebKit</a>, <a href="https://github.com/w3c/web-platform-tests/issues/10655#issuecomment-387434035">this NotRunFiles.xslx file for Edge</a>, and <a href="https://github.com/w3c/web-platform-tests/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+label%3Aflaky">this search result in web-platform-tests</a>.
-<p>Generated on 2018-05-15. <a href="https://github.com/bocoup/wpt-disabled-tests-report">Source on GitHub</a> (<a href="https://github.com/bocoup/wpt-disabled-tests-report/issues">issues/feedback</a>). Data is also available in <a href="common.json">JSON format</a>.
+<p>This report is generated from <a href="https://searchfox.org/mozilla-central/search?q=disabled%3A&case=true&regexp=false&path=testing%2Fweb-platform%2Fmeta">this search result for Mozilla</a>, <a href="https://cs.chromium.org/codesearch/f/chromium/src/third_party/WebKit/LayoutTests/TestExpectations">this TestExpectations file for Chromium</a>, <a href="https://raw.githubusercontent.com/WebKit/webkit/master/LayoutTests/TestExpectations">this TestExpectations file for WebKit</a>, <a href="https://github.com/w3c/web-platform-tests/issues/10655#issuecomment-387434035">this NotRunFiles.xslx file for Edge</a>, and <a href="https://github.com/w3c/web-platform-tests/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3Aflaky">this search result in web-platform-tests</a>.
+<p>Generated on 2018-05-16. <a href="https://github.com/bocoup/wpt-disabled-tests-report">Source on GitHub</a> (<a href="https://github.com/bocoup/wpt-disabled-tests-report/issues">issues/feedback</a>). Data is also available in <a href="common.json">JSON format</a>.
+<p>Also see <a href="https://github.com/w3c/web-platform-tests/pulls?q=is%3Apr+label%3Aflaky">PRs with the <span class="flaky gh-label">flaky</span> label</a>, which represent work to fix tests in this report.
 <p>The graph below shows changes of number of tests over time (<a href="data.csv">CSV format</a>).</p>
 <!-- Graph is based on https://bl.ocks.org/mbostock/3884955 -->
 <svg width="960" height="500"></svg>
@@ -119,7 +122,7 @@ function type(d, _, columns) {
 <h2 id="3-browsers">3 browsers (6 tests)</h2>
 <table>
 <tr><th>Path<th>Products<th>Results<th>Bugs
-<tr><td><a href='https://wpt.fyi/WebCryptoAPI/generateKey/test_successes_RSA-OAEP.https.html'>/WebCryptoAPI/generateKey/test_successes_RSA-OAEP.https.html</a><td>mozilla<br>chromium<br>webkit<td>  disabled<br>[ Pass Timeout ]<br>[ Pass Failure ]<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1279799'>bugzilla.mozilla.org/show_bug.cgi?id=1279799</a><br><a href='https://crbug.com/787971'>crbug.com/787971</a><br>None
+<tr><td><a href='https://wpt.fyi/WebCryptoAPI/generateKey/test_successes_RSA-OAEP.https.html'>/WebCryptoAPI/generateKey/test_successes_RSA-OAEP.https.html</a><td>mozilla<br>chromium<br>webkit<td>  disabled<br>[ Pass Timeout ]<br>[ Pass Failure ]<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1279799'>bugzilla.mozilla.org/show_bug.cgi?id=1279799</a><br><a href='https://crbug.com/787971'>crbug.com/787971</a><br>None<br><a href='https://github.com/w3c/web-platform-tests/issues/10794'>github.com/w3c/web-platform-tests/issues/10794</a>
 <tr><td><a href='https://wpt.fyi/media-source/mediasource-activesourcebuffers.html'>/media-source/mediasource-activesourcebuffers.html</a><td>mozilla<br>chromium<br>edge<td>    disabled<br>[ Failure Pass ]<br>disabled<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1301409'>bugzilla.mozilla.org/show_bug.cgi?id=1301409</a><br><a href='https://crbug.com/715718'>crbug.com/715718</a><br>None<br><a href='https://github.com/w3c/web-platform-tests/issues/10919'>github.com/w3c/web-platform-tests/issues/10919</a>
 <tr><td><a href='https://wpt.fyi/media-source/mediasource-duration.html'>/media-source/mediasource-duration.html</a><td>mozilla<br>chromium<br>edge<td>  disabled<br>[ Failure Pass ]<br>disabled<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1154016'>bugzilla.mozilla.org/show_bug.cgi?id=1154016</a><br><a href='https://crbug.com/689781'>crbug.com/689781</a><br>None<br><a href='https://github.com/w3c/web-platform-tests/issues/10920'>github.com/w3c/web-platform-tests/issues/10920</a>
 <tr><td><a href='https://wpt.fyi/resource-timing/resource-timing.html'>/resource-timing/resource-timing.html</a><td>mozilla<br>chromium<br>webkit<td>  disabled<br>[ Timeout Failure ]<br>[ Pass Failure ]<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1290858'>bugzilla.mozilla.org/show_bug.cgi?id=1290858</a><br><a href='https://crbug.com/626703'>crbug.com/626703</a><br><a href='https://webkit.org/b/161088'>webkit.org/b/161088</a><br><a href='https://github.com/w3c/web-platform-tests/issues/10798'>github.com/w3c/web-platform-tests/issues/10798</a>
@@ -178,7 +181,7 @@ function type(d, _, columns) {
 <tr><td><a href='https://wpt.fyi/service-workers/service-worker/update-after-oneday.https.html'>/service-workers/service-worker/update-after-oneday.https.html</a><td>chromium<br>webkit<td>[ Skip ]<br>[ Skip ]<td><a href='https://crbug.com/691944'>crbug.com/691944</a><br>None
 <tr><td><a href='https://wpt.fyi/workers/nested_worker.worker.html'>/workers/nested_worker.worker.html</a><td>chromium<br>webkit<td>[ Timeout ]<br>[ Skip ]<td><a href='https://crbug.com/709227'>crbug.com/709227</a><br>None
 <tr><td><a href='https://wpt.fyi/media-source/mediasource-remove.html'>/media-source/mediasource-remove.html</a><td>chromium<br>edge<td>[ Failure Pass ]<br>disabled<td><a href='https://crbug.com/715718'>crbug.com/715718</a><br>None
-<tr><td><a href='https://wpt.fyi/encoding/legacy-mb-tchinese/big5/big5-encode-form-errors-extBa.html'>/encoding/legacy-mb-tchinese/big5/big5-encode-form-errors-extBa.html</a><td>chromium<br>webkit<td>[ Skip ]<br>[ Skip ]<td><a href='https://crbug.com/736056'>crbug.com/736056</a><br>None
+<tr><td><a href='https://wpt.fyi/encoding/legacy-mb-tchinese/big5/big5-encode-form-errors-extBa.html'>/encoding/legacy-mb-tchinese/big5/big5-encode-form-errors-extBa.html</a><td>chromium<br>webkit<td>[ Skip ]<br>[ Skip ]<td><a href='https://crbug.com/736056'>crbug.com/736056</a><br>None<br><a href='https://github.com/w3c/web-platform-tests/issues/11015'>github.com/w3c/web-platform-tests/issues/11015</a>
 <tr><td><a href='https://wpt.fyi/encoding/legacy-mb-tchinese/big5/big5-encode-form-errors-extBb.html'>/encoding/legacy-mb-tchinese/big5/big5-encode-form-errors-extBb.html</a><td>chromium<br>webkit<td>[ Skip ]<br>[ Skip ]<td><a href='https://crbug.com/736056'>crbug.com/736056</a><br>None
 <tr><td><a href='https://wpt.fyi/WebCryptoAPI/generateKey/successes_RSA-OAEP.https.worker.html'>/WebCryptoAPI/generateKey/successes_RSA-OAEP.https.worker.html</a><td>chromium<br>webkit<td>[ Pass Timeout ]<br>[ Skip ]<td><a href='https://crbug.com/787971'>crbug.com/787971</a><br>None
 <tr><td><a href='https://wpt.fyi/WebCryptoAPI/generateKey/successes_RSA-PSS.https.worker.html'>/WebCryptoAPI/generateKey/successes_RSA-PSS.https.worker.html</a><td>chromium<br>webkit<td>[ Pass Timeout ]<br>[ Slow ]<td><a href='https://crbug.com/787971'>crbug.com/787971</a><br>None
@@ -190,7 +193,7 @@ function type(d, _, columns) {
 <tr><td><a href='https://wpt.fyi/media-source/mediasource-sequencemode-append-buffer.html'>/media-source/mediasource-sequencemode-append-buffer.html</a><td>chromium<br>edge<td>[ Failure Pass ]<br>disabled<td><a href='https://crbug.com/807110'>crbug.com/807110</a><br>None
 <tr><td><a href='https://wpt.fyi/media-source/mediasource-sourcebuffer-mode-timestamps.html'>/media-source/mediasource-sourcebuffer-mode-timestamps.html</a><td>chromium<br>edge<td>[ Failure Pass ]<br>disabled<td><a href='https://crbug.com/807110'>crbug.com/807110</a><br>None
 </table>
-<h2 id="1-browser">1 browser (1101 tests)</h2>
+<h2 id="1-browser">1 browser (1108 tests)</h2>
 <details id="flaky-tests">
 <summary>Flaky tests (125)</summary>
 <table>
@@ -407,7 +410,7 @@ function type(d, _, columns) {
 </table>
 </details>
 <details id="disabled-tests">
-<summary>Disabled tests (904)</summary>
+<summary>Disabled tests (911)</summary>
 <table>
 <tr><th>Path<th>Products<th>Results<th>Bugs
 <tr><td><a href='https://wpt.fyi/2dcontext/building-paths/canvas_complexshapes_beziercurveto_001.htm'>/2dcontext/building-paths/canvas_complexshapes_beziercurveto_001.htm</a><td>mozilla<td>  disabled: if (os == "win") and (version == "10.0.15603")<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1372037'>bugzilla.mozilla.org/show_bug.cgi?id=1372037</a>
@@ -437,6 +440,7 @@ function type(d, _, columns) {
 <tr><td><a href='https://wpt.fyi/content-security-policy/media-src/media-src-7_1.html'>/content-security-policy/media-src/media-src-7_1.html</a><td>mozilla<td>  disabled<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1124091'>bugzilla.mozilla.org/show_bug.cgi?id=1124091</a>
 <tr><td><a href='https://wpt.fyi/content-security-policy/navigate-to/__dir__'>/content-security-policy/navigate-to/__dir__</a><td>mozilla<td>disabled:<td>None
 <tr><td><a href='https://wpt.fyi/content-security-policy/navigate-to/child-navigates-parent-allowed.html'>/content-security-policy/navigate-to/child-navigates-parent-allowed.html</a><td>mozilla<td>  disabled:<td>None
+<tr><td><a href='https://wpt.fyi/content-security-policy/navigate-to/child-navigates-parent-blocked.html'>/content-security-policy/navigate-to/child-navigates-parent-blocked.html</a><td>mozilla<td>  disabled: if not debug && (os == "linux") https://bugzilla.mozilla.org/show_bug.cgi?id=1450864<td>None
 <tr><td><a href='https://wpt.fyi/content-security-policy/navigate-to/link-click-blocked.html'>/content-security-policy/navigate-to/link-click-blocked.html</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/content-security-policy/navigate-to/link-click-redirected-allowed.html'>/content-security-policy/navigate-to/link-click-redirected-allowed.html</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/content-security-policy/prefetch-src/prefetch-header-allowed.html'>/content-security-policy/prefetch-src/prefetch-header-allowed.html</a><td>mozilla<td>  disabled<td><a href='https://bugzilla.mozilla.org/show_bug.cgi?id=1455236'>bugzilla.mozilla.org/show_bug.cgi?id=1455236</a>
@@ -751,6 +755,8 @@ function type(d, _, columns) {
 <tr><td><a href='https://wpt.fyi/webdriver/tests/actions/mouse_pause_dblclick.py'>/webdriver/tests/actions/mouse_pause_dblclick.py</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/webdriver/tests/execute_async_script/user_prompts.py'>/webdriver/tests/execute_async_script/user_prompts.py</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/webdriver/tests/execute_script/user_prompts.py'>/webdriver/tests/execute_script/user_prompts.py</a><td>mozilla<td>  disabled:<td>None
+<tr><td><a href='https://wpt.fyi/webdriver/tests/get_element_property/user_prompts.py'>/webdriver/tests/get_element_property/user_prompts.py</a><td>mozilla<td>  disabled:<td>None
+<tr><td><a href='https://wpt.fyi/webdriver/tests/get_element_tag_name/user_prompts.py'>/webdriver/tests/get_element_tag_name/user_prompts.py</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/webdriver/tests/get_title/user_prompts.py'>/webdriver/tests/get_title/user_prompts.py</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/webdriver/tests/get_window_rect/user_prompts.py'>/webdriver/tests/get_window_rect/user_prompts.py</a><td>mozilla<td>  disabled:<td>None
 <tr><td><a href='https://wpt.fyi/webdriver/tests/maximize_window/user_prompts.py'>/webdriver/tests/maximize_window/user_prompts.py</a><td>mozilla<td>  disabled:<td>None
@@ -1068,6 +1074,10 @@ function type(d, _, columns) {
 <tr><td><a href='https://wpt.fyi/service-workers/service-worker/navigation-preload'>/service-workers/service-worker/navigation-preload</a><td>webkit<td>[ Skip ]<td>None
 <tr><td><a href='https://wpt.fyi/service-workers/service-worker/shared-worker-controlled.https.html'>/service-workers/service-worker/shared-worker-controlled.https.html</a><td>webkit<td>[ Skip ]<td>None
 <tr><td><a href='https://wpt.fyi/service-workers/service-worker/claim-shared-worker-fetch.https.html'>/service-workers/service-worker/claim-shared-worker-fetch.https.html</a><td>webkit<td>[ Skip ]<td>None
+<tr><td><a href='https://wpt.fyi/server-timing/test_server_timing.html'>/server-timing/test_server_timing.html</a><td>webkit<td>[ Skip ]<td>None
+<tr><td><a href='https://wpt.fyi/server-timing/test_server_timing.https.html'>/server-timing/test_server_timing.https.html</a><td>webkit<td>[ Skip ]<td>None
+<tr><td><a href='https://wpt.fyi/server-timing/navigation_timing_idl.html'>/server-timing/navigation_timing_idl.html</a><td>webkit<td>[ Skip ]<td>None
+<tr><td><a href='https://wpt.fyi/server-timing/navigation_timing_idl.https.html'>/server-timing/navigation_timing_idl.https.html</a><td>webkit<td>[ Skip ]<td>None
 <tr><td><a href='https://wpt.fyi/workers/data-url-shared.html'>/workers/data-url-shared.html</a><td>webkit<td>[ Skip ]<td>None<br><a href='https://github.com/w3c/web-platform-tests/issues/4884'>github.com/w3c/web-platform-tests/issues/4884</a>
 <tr><td><a href='https://wpt.fyi/workers/semantics/interface-objects/003.html'>/workers/semantics/interface-objects/003.html</a><td>webkit<td>[ Skip ]<td>None
 <tr><td><a href='https://wpt.fyi/workers/constructors/SharedWorker'>/workers/constructors/SharedWorker</a><td>webkit<td>[ Skip ]<td>None
