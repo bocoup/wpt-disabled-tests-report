@@ -47,11 +47,13 @@ def addPath(bug, path, results, product):
     if path[0] != "/":
         path = "/" + path
     pathFound = False
+    pathPrefix = None
+    if product == "web-platform-tests" and path[-1:] == "*":
+        pathPrefix = path[:-1]
     for item in common:
-        if item["path"] == path:
+        if pathPrefix and item["path"].find(pathPrefix) == 0 or item["path"] == path:
             item[product] = {"bug": bug, "results": results}
             pathFound = True
-            break
     if pathFound == False:
         common.append({"path": path, product: {"bug": bug, "results": results}})
 
@@ -100,7 +102,7 @@ for rownum in range(sheet.nrows):
 # web-platform-tests issues
 wptIssues = json.loads(urllib.request.urlopen(wptAPIURL).read())["items"]
 for item in wptIssues:
-    match = re.search(r"^(/[^ ]+) is (?:disabled|flaky|slow)", item["title"])
+    match = re.search(r"^(/[^ ]+) (?:is|are) (?:disabled|flaky|slow)", item["title"])
     if match == None:
         continue
     bug = item["html_url"][len("https://"):]
@@ -306,7 +308,7 @@ addEventListener('toggle', e => {
 todayStr = date.today().isoformat()
 theadStr = "<tr><th>Path<th>Products<th>Results<th>Bugs<th>New issue"
 rowTemplate = Template("<tr><td>$path<td>$products<td>$results<td>$bugs<td>$newIssue")
-newIssueTemplate = Template("""<a href="https://github.com/w3c/web-platform-tests/issues/new?title=$path%20is%20flaky%20in%20$products&body=http://bocoup.github.io/wpt-disabled-tests-report/%0A%0AInvestigate what's up with this test:%0A%0APath | Products | Results | Bugs%0A-- | -- | -- | --%0A$path | $products | $results | $bugs&assignees=zcorpan&labels=flaky" class="gh-button">New issue</a>""")
+newIssueTemplate = Template("""<a href="https://github.com/w3c/web-platform-tests/issues/new?title=$path%20is%20$shortResult%20in%20$products&body=http://bocoup.github.io/wpt-disabled-tests-report/%0A%0AInvestigate what's up with this test:%0A%0APath | Products | Results | Bugs%0A-- | -- | -- | --%0A$path | $products | $results | $bugs&assignees=zcorpan&labels=flaky" class="gh-button">New issue</a>""")
 
 def getProducts(item):
     products = []
@@ -343,6 +345,18 @@ def stringify(item, products, property, joiner):
             arr.append(link(item["web-platform-tests"][property]))
     return joiner.join(arr)
 
+def shortResult(item, products):
+    arr = []
+    for product in products:
+        result = item[product]["results"]
+        if result.find("disabled") != -1 or result == "[ Skip ]":
+            arr.append("disabled")
+        elif result == "[ Slow ]" or result == "[ Timeout ]":
+            arr.append("slow")
+        else:
+            arr.append("flaky")
+    return "/".join(arr)
+
 for item in common:
     products = getProducts(item)
     num = len(products)
@@ -351,6 +365,7 @@ for item in common:
     else:
         newIssue = newIssueTemplate.substitute(path=item["path"],
                                                products=" ".join(products),
+                                               shortResult=shortResult(item, products),
                                                results=stringify(item, products, "results", " "),
                                                bugs=stringify(item, products, "bug", " ")
                                                )
