@@ -127,16 +127,19 @@ html = Template("""<!doctype html>
  html { font-family: sans-serif; line-height: 1.5; background: white; color: black }
  body { margin-bottom: 50vh }
  p { margin: 0 40px; padding: 0.5em; background-color: #fdd73d; max-width: 55em }
- .gh-label { font-weight: bold; padding: 5px; border-radius: 3px }
- .flaky.gh-label { background-color: #d93f0b; color: white }
  h1 { background-color: #eaeaea; font-size: 1.5em; font-weight: normal }
  img { padding: 10px 50px; vertical-align: -16px }
  table { border-collapse: collapse; width: 100% }
  td:nth-child(4) { white-space: nowrap }
- th, td { border: thin solid; padding: 0 0.5em }
+ th, td { border: thin solid; padding: 0 0.5em; height: 3em }
+ td:first-child + td + td + td + td { text-align: center }
  tr:nth-child(even) { background-color: #eaeaea }
  :link, :visited { text-decoration: none }
  :link:hover, :visited:hover { text-decoration: underline }
+ .gh-label { font-weight: bold; padding: 5px; border-radius: 3px }
+ .flaky.gh-label { background-color: #d93f0b; color: white }
+ .gh-button { background-image: linear-gradient(-180deg, #fafbfc 0%, #eff3f6 90%); color: black; white-space: nowrap; border: 1px solid silver; padding: 6px 12px; border-radius:0.25em }
+ .gh-button:hover { text-decoration: none }
  path { fill: none }
 </style>
 <h1><a href="https://bocoup.com/"><img src="https://static.bocoup.com/assets/img/bocoup-logo@2x.png" alt="Bocoup" width=135 height=40></a> $title</h1>
@@ -301,8 +304,9 @@ addEventListener('toggle', e => {
 </script>
 """)
 todayStr = date.today().isoformat()
-theadStr = "<tr><th>Path<th>Products<th>Results<th>Bugs"
-rowTemplate = Template("<tr><td>$path<td>$products<td>$results<td>$bugs")
+theadStr = "<tr><th>Path<th>Products<th>Results<th>Bugs<th>New issue"
+rowTemplate = Template("<tr><td>$path<td>$products<td>$results<td>$bugs<td>$newIssue")
+newIssueTemplate = Template("""<a href="https://github.com/w3c/web-platform-tests/issues/new?title=$path%20is%20flaky%20in%20$products&body=http://bocoup.github.io/wpt-disabled-tests-report/%0A%0AInvestigate what's up with this test:%0A%0APath | Products | Results | Bugs%0A-- | -- | -- | --%0A$path | $products | $results | $bugs&assignees=zcorpan&labels=flaky" class="gh-button">New issue</a>""")
 
 def getProducts(item):
     products = []
@@ -316,28 +320,46 @@ def link(url):
         return "None"
     return "<a href='https://%s'>%s</a>" % (url, url)
 
+def githubLink(url):
+    if url is None:
+        return "None"
+    return "https://%s" % url
+
 def linkWPTFYI(path):
     return "<a href='https://wpt.fyi%s'>%s</a>" % (path, path)
 
-def stringify(item, products, property):
+def stringify(item, products, property, joiner):
     arr = []
     for product in products:
         if property == "bug":
-            arr.append(link(item[product][property]))
+            if joiner == "<br>":
+                arr.append(link(item[product][property]))
+            else:
+                arr.append(githubLink(item[product][property]))
         else:
             arr.append(item[product][property])
     if property == "bug":
         if "web-platform-tests" in item:
             arr.append(link(item["web-platform-tests"][property]))
-    return "<br>".join(arr)
+    return joiner.join(arr)
 
 for item in common:
     products = getProducts(item)
     num = len(products)
-    row = rowTemplate.substitute(bugs=stringify(item, products, "bug"),
-                                 path=linkWPTFYI(item["path"]),
+    if "web-platform-tests" in item and "bug" in item["web-platform-tests"]:
+        newIssue = ""
+    else:
+        newIssue = newIssueTemplate.substitute(path=item["path"],
+                                               products=" ".join(products),
+                                               results=stringify(item, products, "results", " "),
+                                               bugs=stringify(item, products, "bug", " ")
+                                               )
+    row = rowTemplate.substitute(path=linkWPTFYI(item["path"]),
                                  products="<br>".join(products),
-                                 results=stringify(item, products, "results"))
+                                 results=stringify(item, products, "results", "<br>"),
+                                 bugs=stringify(item, products, "bug", "<br>"),
+                                 newIssue=newIssue
+                                 )
     if num == 4:
         foundIn4.append(row)
     if num == 3:
