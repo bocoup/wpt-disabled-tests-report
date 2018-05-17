@@ -142,6 +142,7 @@ html = Template("""<!doctype html>
  .flaky.gh-label { background-color: #d93f0b; color: white }
  .gh-button { background-image: linear-gradient(-180deg, #fafbfc 0%, #eff3f6 90%); color: black; white-space: nowrap; border: 1px solid silver; padding: 6px 12px; border-radius:0.25em }
  .gh-button:hover { text-decoration: none }
+ svg { display: block; margin: 1em }
  path { fill: none }
 </style>
 <h1><a href="https://bocoup.com/"><img src="https://static.bocoup.com/assets/img/bocoup-logo@2x.png" alt="Bocoup" width=135 height=40></a> $title</h1>
