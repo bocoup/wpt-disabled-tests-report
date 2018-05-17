@@ -129,7 +129,7 @@ html = Template("""<!doctype html>
  html { font-family: sans-serif; line-height: 1.5; background: white; color: black }
  body { margin-bottom: 50vh }
  p { margin: 0 40px; padding: 0.5em; background-color: #fdd73d; max-width: 55em }
- h1 { background-color: #eaeaea; font-size: 1.5em; font-weight: normal }
+ h1 { background-color: #eaeaea; font-size: 1.5em; font-weight: normal; padding-left: 50px; text-indent: -50px }
  img { padding: 10px 50px; vertical-align: -16px }
  table { border-collapse: collapse; width: 100% }
  td:nth-child(4) { white-space: nowrap }
