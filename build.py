@@ -442,6 +442,17 @@ outHTML = html.substitute(title="Disabled/flaky/slow web-platform-tests Report",
 with open('index.html', 'w') as out:
     out.write(outHTML)
 
+# Normalize data.csv (1 entry per day)
+csvData = {}
+with open('data.csv', 'r') as file:
+    for line in file:
+        date, values = line.split(",", maxsplit=1)
+        csvData[date] = values
+
+csvData[todayStr] = ",".join([str(numRows4), str(numRows3), str(numRows2), str(flakyNum), str(slowNum), str(timeoutNum), str(disabledNum)])
+
 # Output CSV
-with open('data.csv', 'a') as out:
-    out.write((",".join([todayStr, str(numRows4), str(numRows3), str(numRows2), str(flakyNum), str(slowNum), str(timeoutNum), str(disabledNum)]) + "\n"))
+with open('data.csv', 'w') as out:
+    for date in csvData:
+        out.write((date + "," + csvData[date]))
+    out.write("\n")
