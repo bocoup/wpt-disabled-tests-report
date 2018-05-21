@@ -8,6 +8,7 @@ from datetime import date
 import xlrd
 
 mozillaURL = "https://searchfox.org/mozilla-central/search?q=disabled%3A&case=true&regexp=false&path=testing%2Fweb-platform%2Fmeta"
+mozillaBugzillaURL = "https://searchfox.org/mozilla-central/search?q=bugzilla&case=true&path=testing%2Fweb-platform%2Fmeta"
 chromiumURL = "https://cs.chromium.org/codesearch/f/chromium/src/third_party/WebKit/LayoutTests/TestExpectations"
 webkitURL = "https://raw.githubusercontent.com/WebKit/webkit/master/LayoutTests/TestExpectations"
 edgeXLSXURL = "https://github.com/w3c/web-platform-tests/files/1984479/NotRunFiles.xlsx"
@@ -16,34 +17,10 @@ flakyQuery = "q=is%3Aissue+label%3Aflaky"
 wptAPIURL = "https://api.github.com/search/issues?" + flakyQuery + "+repo%3Aw3c/web-platform-tests"
 wptHTMLURL = "https://github.com/w3c/web-platform-tests/issues?utf8=%E2%9C%93&" + flakyQuery
 
-# Mozilla
-contents = urllib.request.urlopen(mozillaURL).readlines()
-# Extract the data, it's on a single line after a "<script>" line
-foundScript = False
-for line in contents:
-    if foundScript:
-        line = line.split(b"var results = ")[1][:-2]
-        break
-    if b"<script>" in line:
-        foundScript = True
-    continue
-
-# Massage data structure into a common format
-common = json.loads(line)["test"]["Textual Occurrences"]
-for item in common:
-    line = item["lines"][0]["line"]
-    values = line.split(': https://')
-    results = values.pop(0)
-    if len(values) > 0:
-        bug = values[0]
-    else:
-        bug = None
-    item["mozilla"] = {"bug": bug, "results": results}
-    del item["lines"]
-    item["path"] = item["path"].replace("testing/web-platform/meta", "").replace(".ini", "")
+common = []
 
 # Add path to common, merging with existing if present
-def addPath(bug, path, results, product):
+def addPath(bug, path, results, product, onlyBug = False):
     if path[0] != "/":
         path = "/" + path
     pathFound = False
@@ -52,10 +29,42 @@ def addPath(bug, path, results, product):
         pathPrefix = path[:-1]
     for item in common:
         if pathPrefix and item["path"].find(pathPrefix) == 0 or item["path"] == path:
-            item[product] = {"bug": bug, "results": results}
+            if product in item and item[product]["bug"] == None:
+                item[product]["bug"] = bug
+                item[product]["results"] += " " + results
+            else:
+                item[product] = {"bug": bug, "results": results}
             pathFound = True
-    if pathFound == False:
+    if pathFound == False and onlyBug == False:
         common.append({"path": path, product: {"bug": bug, "results": results}})
+
+# Mozilla
+def scrapeSearchFox(url, isBugzillaSearch = False):
+    contents = urllib.request.urlopen(url).readlines()
+    # Extract the data, it's on a single line after a "<script>" line
+    foundScript = False
+    for line in contents:
+        if foundScript:
+            line = line.split(b"var results = ")[1][:-2]
+            break
+        if b"<script>" in line:
+            foundScript = True
+        continue
+
+    # Massage data structure into a common format
+    items = json.loads(line)["test"]["Textual Occurrences"]
+    for item in items:
+        line = item["lines"][0]["line"]
+        values = line.split(' https://')
+        results = values.pop(0)
+        if len(values) > 0:
+            bug = values[0]
+        else:
+            bug = None
+        addPath(bug, item["path"].replace("testing/web-platform/meta", "").replace(".ini", ""), results, "mozilla", isBugzillaSearch)
+
+scrapeSearchFox(mozillaURL)
+scrapeSearchFox(mozillaBugzillaURL, True)
 
 # Fetch and parse TestExpectations file
 def extractFromTestExpectations(url, wptPrefix, product):
