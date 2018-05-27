@@ -7,7 +7,7 @@ onpageshow = e => {
   disabledDetails.open = sessionStorage["disabled-tests-open"] === "true";
   if (location.hash) {
     const element = document.querySelector(location.hash);
-    if (element instanceof HTMLDetailsElement) {
+    if (element && element instanceof HTMLDetailsElement) {
       element.open = true;
     }
   }
