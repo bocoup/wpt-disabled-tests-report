@@ -196,11 +196,11 @@ for item in common:
     if "web-platform-tests" in item and "bug" in item["web-platform-tests"]:
         newIssue = ""
     else:
-        issueTitle = titleTemplate.substitute(path=item["path"],
+        issueTitle = issueTitleTemplate.substitute(path=item["path"],
                                               results=shortResult(item, products),
                                               products=" ".join(products)
                                               )
-        issueBody = bodyTemplate.substitute(path=item["path"],
+        issueBody = issueBodyTemplate.substitute(path=item["path"],
                                             products=" ".join(products),
                                             results=stringify(item, products, "results", " "),
                                             bugs=stringify(item, products, "bug", " ")
