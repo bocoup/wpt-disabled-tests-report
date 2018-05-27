@@ -6,6 +6,8 @@ import re
 from string import Template
 from datetime import date
 import xlrd
+import html
+import urllib
 
 mozillaURL = "https://searchfox.org/mozilla-central/search?q=disabled%3A&case=true&regexp=false&path=testing%2Fweb-platform%2Fmeta"
 mozillaBugzillaURL = "https://searchfox.org/mozilla-central/search?q=bugzilla&case=true&path=testing%2Fweb-platform%2Fmeta"
@@ -131,73 +133,21 @@ slowRows = []
 timeoutRows = []
 disabledRows = []
 
-html = Template("""<!doctype html>
-<meta charset=utf-8>
-<title>$title</title>
-<link rel="stylesheet" href="static/style.css">
-<script src="static/details.js" defer></script>
-<h1><a href="https://bocoup.com/"><img src="https://static.bocoup.com/assets/img/bocoup-logo@2x.png" alt="Bocoup" width=135 height=40></a> $title</h1>
-<p>A <dfn>disabled</dfn> test is a test that is not run, maybe because it is flaky or because the feature it is testing is not yet implemented. For WebKit and Chromium, this is denoted as "[&nbsp;Skip&nbsp;]". For Mozilla and Edge, this is denoted as "disabled".
-<p>A <dfn>flaky</dfn> test is a test that gives inconsistent results, e.g., sometimes passing and sometimes failing. For Chromium and WebKit, this is denoted as "[&nbsp;Pass&nbsp;Failure&nbsp;]" (or other combinations of results).
-<p>A <dfn>slow</dfn> test is a test that is marked as taking a long time to run. For Chromium and WebKit, this is denoted as "[&nbsp;Slow&nbsp;]".
-<p>The tables below show all tests in <a href="https://github.com/w3c/web-platform-tests">web-platform-tests</a> that are disabled, flaky, or slow, in 4, 3, 2, and 1 browsers. Tests that show up for more than one browser are likely to be due to issues with the tests.
-<p>This report is generated from <a href="$mozillaURL">this search result for Mozilla</a>, <a href="$chromiumURL">this TestExpectations file for Chromium</a>, <a href="$webkitURL">this TestExpectations file for WebKit</a>, <a href="$edgeHTMLURL">this NotRunFiles.xslx file for Edge</a>, and <a href="$wptHTMLURL">this search result in web-platform-tests</a>.
-<p>Generated on $date. <a href="https://github.com/bocoup/wpt-disabled-tests-report">Source on GitHub</a> (<a href="https://github.com/bocoup/wpt-disabled-tests-report/issues">issues/feedback</a>). Data is also available in <a href="common.json">JSON format</a>.
-<p>Also see <a href="https://github.com/w3c/web-platform-tests/pulls?q=is%3Apr+label%3Aflaky">PRs with the <span class="flaky gh-label">flaky</span> label</a>, which represent work to fix tests in this report.
-<p>The graph below shows changes of number of tests over time (<a href="data.csv">CSV format</a>).</p>
-<!-- Graph is based on https://bl.ocks.org/mbostock/3884955 -->
-<svg width="960" height="500"></svg>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="static/graph.js"></script>
-<h2 id="4-browsers">4 browsers ($numRows4 tests)</h2>
-<table>
-$thead
-$rows4
-</table>
-<h2 id="3-browsers">3 browsers ($numRows3 tests)</h2>
-<table>
-$thead
-$rows3
-</table>
-<h2 id="2-browsers">2 browsers ($numRows2 tests)</h2>
-<table>
-$thead
-$rows2
-</table>
-<h2 id="1-browser">1 browser ($numRows1 tests)</h2>
-<details id="flaky-tests">
-<summary>Flaky tests ($flakyNum)</summary>
-<table>
-$thead
-$flakyRows
-</table>
-</details>
-<details id="slow-tests">
-<summary>Slow tests ($slowNum)</summary>
-<table>
-$thead
-$slowRows
-</table>
-</details>
-<details id="timeout-tests">
-<summary>Timeout tests ($timeoutNum)</summary>
-<table>
-$thead
-$timeoutRows
-</table>
-</details>
-<details id="disabled-tests">
-<summary>Disabled tests ($disabledNum)</summary>
-<table>
-$thead
-$disabledRows
-</table>
-</details>
-""")
+htmlTemplate = Template(open('templates/index.html', 'r').read())
 todayStr = date.today().isoformat()
 theadStr = "<tr><th>Path<th>Products<th>Results<th>Bugs<th>New issue"
 rowTemplate = Template("<tr><td>$path<td>$products<td>$results<td>$bugs<td>$newIssue")
-newIssueTemplate = Template("""<a href="https://github.com/w3c/web-platform-tests/issues/new?title=$path%20is%20$shortResult%20in%20$products&body=http://bocoup.github.io/wpt-disabled-tests-report/%0A%0AInvestigate what's up with this test:%0A%0APath | Products | Results | Bugs%0A-- | -- | -- | --%0A$path | $products | $results | $bugs&assignees=zcorpan&labels=flaky" class="gh-button">New issue</a>""")
+titleTemplate = Template("$path is $results in $products")
+bodyTemplate = Template("""http://bocoup.github.io/wpt-disabled-tests-report/
+
+Investigate what's up with this test:
+
+Path | Products | Results | Bugs
+-- | -- | -- | --
+$path | $products | $results | $bugs
+
+cc @zcorpan""")
+newIssueTemplate = Template("""<a href="https://github.com/w3c/web-platform-tests/issues/new?title=$title&amp;body=$body&amp;labels=flaky" class="gh-button">New issue</a>""")
 
 def getProducts(item):
     products = []
@@ -252,11 +202,17 @@ for item in common:
     if "web-platform-tests" in item and "bug" in item["web-platform-tests"]:
         newIssue = ""
     else:
-        newIssue = newIssueTemplate.substitute(path=item["path"],
-                                               products=" ".join(products),
-                                               shortResult=shortResult(item, products),
-                                               results=stringify(item, products, "results", " "),
-                                               bugs=stringify(item, products, "bug", " ")
+        title = titleTemplate.substitute(path=item["path"],
+                                         results=shortResult(item, products),
+                                         products=" ".join(products)
+                                         )
+        body = bodyTemplate.substitute(path=item["path"],
+                                       products=" ".join(products),
+                                       results=stringify(item, products, "results", " "),
+                                       bugs=stringify(item, products, "bug", " ")
+                                       )
+        newIssue = newIssueTemplate.substitute(title=urllib.parse.quote_plus(title),
+                                               body=urllib.parse.quote_plus(body)
                                                )
     row = rowTemplate.substitute(path=linkWPTFYI(item["path"]),
                                  products="<br>".join(products),
@@ -293,30 +249,30 @@ numRows3 = len(foundIn3)
 numRows2 = len(foundIn2)
 numRows1 = flakyNum + slowNum + timeoutNum + disabledNum
 
-outHTML = html.substitute(title="Disabled/flaky/slow web-platform-tests Report",
-                          mozillaURL=mozillaURL,
-                          chromiumURL=chromiumURL,
-                          webkitURL=webkitURL,
-                          edgeHTMLURL=edgeHTMLURL,
-                          wptHTMLURL=wptHTMLURL,
-                          date=todayStr,
-                          thead=theadStr,
-                          numRows4=str(numRows4),
-                          rows4="\n".join(foundIn4),
-                          numRows3=str(numRows3),
-                          rows3="\n".join(foundIn3),
-                          numRows2=str(numRows2),
-                          rows2="\n".join(foundIn2),
-                          numRows1=str(numRows1),
-                          flakyNum=str(flakyNum),
-                          flakyRows="\n".join(flakyRows),
-                          slowNum=str(slowNum),
-                          slowRows="\n".join(slowRows),
-                          timeoutNum=str(timeoutNum),
-                          timeoutRows="\n".join(timeoutRows),
-                          disabledNum=str(disabledNum),
-                          disabledRows="\n".join(disabledRows),
-                          )
+outHTML = htmlTemplate.substitute(title="Disabled/flaky/slow web-platform-tests Report",
+                                  mozillaURL=html.escape(mozillaURL),
+                                  chromiumURL=html.escape(chromiumURL),
+                                  webkitURL=html.escape(webkitURL),
+                                  edgeHTMLURL=html.escape(edgeHTMLURL),
+                                  wptHTMLURL=html.escape(wptHTMLURL),
+                                  date=todayStr,
+                                  thead=theadStr,
+                                  numRows4=str(numRows4),
+                                  rows4="\n".join(foundIn4),
+                                  numRows3=str(numRows3),
+                                  rows3="\n".join(foundIn3),
+                                  numRows2=str(numRows2),
+                                  rows2="\n".join(foundIn2),
+                                  numRows1=str(numRows1),
+                                  flakyNum=str(flakyNum),
+                                  flakyRows="\n".join(flakyRows),
+                                  slowNum=str(slowNum),
+                                  slowRows="\n".join(slowRows),
+                                  timeoutNum=str(timeoutNum),
+                                  timeoutRows="\n".join(timeoutRows),
+                                  disabledNum=str(disabledNum),
+                                  disabledRows="\n".join(disabledRows),
+                                  )
 
 with open('index.html', 'w') as out:
     out.write(outHTML)
