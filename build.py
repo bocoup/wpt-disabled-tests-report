@@ -137,16 +137,8 @@ htmlTemplate = Template(open('templates/index.html', 'r').read())
 todayStr = date.today().isoformat()
 theadStr = "<tr><th>Path<th>Products<th>Results<th>Bugs<th>New issue"
 rowTemplate = Template("<tr><td>$path<td>$products<td>$results<td>$bugs<td>$newIssue")
-titleTemplate = Template("$path is $results in $products")
-bodyTemplate = Template("""http://bocoup.github.io/wpt-disabled-tests-report/
-
-Investigate what's up with this test:
-
-Path | Products | Results | Bugs
--- | -- | -- | --
-$path | $products | $results | $bugs
-
-cc @zcorpan""")
+issueTitleTemplate = Template("$path is $results in $products")
+issueBodyTemplate = Template(open('templates/issue-body.md', 'r').read())
 newIssueTemplate = Template("""<a href="https://github.com/w3c/web-platform-tests/issues/new?title=$title&amp;body=$body&amp;labels=flaky" class="gh-button">New issue</a>""")
 
 def getProducts(item):
@@ -204,17 +196,17 @@ for item in common:
     if "web-platform-tests" in item and "bug" in item["web-platform-tests"]:
         newIssue = ""
     else:
-        title = titleTemplate.substitute(path=item["path"],
-                                         results=shortResult(item, products),
-                                         products=" ".join(products)
-                                         )
-        body = bodyTemplate.substitute(path=item["path"],
-                                       products=" ".join(products),
-                                       results=stringify(item, products, "results", " "),
-                                       bugs=stringify(item, products, "bug", " ")
-                                       )
-        newIssue = newIssueTemplate.substitute(title=urllib.parse.quote_plus(title),
-                                               body=urllib.parse.quote_plus(body)
+        issueTitle = titleTemplate.substitute(path=item["path"],
+                                              results=shortResult(item, products),
+                                              products=" ".join(products)
+                                              )
+        issueBody = bodyTemplate.substitute(path=item["path"],
+                                            products=" ".join(products),
+                                            results=stringify(item, products, "results", " "),
+                                            bugs=stringify(item, products, "bug", " ")
+                                            )
+        newIssue = newIssueTemplate.substitute(title=urllib.parse.quote_plus(issueTitle),
+                                               body=urllib.parse.quote_plus(issueBody)
                                                )
     row = rowTemplate.substitute(path=linkWPTFYI(item["path"]),
                                  products="<br>".join(products),
