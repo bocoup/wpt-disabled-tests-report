@@ -134,26 +134,8 @@ disabledRows = []
 html = Template("""<!doctype html>
 <meta charset=utf-8>
 <title>$title</title>
-<style>
- html { font-family: sans-serif; line-height: 1.5; background: white; color: black }
- body { margin-bottom: 50vh }
- p { margin: 0 40px; padding: 0.5em; background-color: #fdd73d; max-width: 55em }
- h1 { background-color: #eaeaea; font-size: 1.5em; font-weight: normal; padding-left: 50px; text-indent: -50px }
- img { padding: 10px 50px; vertical-align: -16px }
- table { border-collapse: collapse; width: 100% }
- td:nth-child(4) { white-space: nowrap }
- th, td { border: thin solid; padding: 0 0.5em; height: 3em }
- td:first-child + td + td + td + td { text-align: center }
- tr:nth-child(even) { background-color: #eaeaea }
- :link, :visited { text-decoration: none }
- :link:hover, :visited:hover { text-decoration: underline }
- .gh-label { font-weight: bold; padding: 5px; border-radius: 3px }
- .flaky.gh-label { background-color: #d93f0b; color: white }
- .gh-button { background-image: linear-gradient(-180deg, #fafbfc 0%, #eff3f6 90%); color: black; white-space: nowrap; border: 1px solid silver; padding: 6px 12px; border-radius:0.25em }
- .gh-button:hover { text-decoration: none }
- svg { display: block; margin: 1em }
- path { fill: none }
-</style>
+<link rel="stylesheet" href="static/style.css">
+<script src="static/details.js" defer></script>
 <h1><a href="https://bocoup.com/"><img src="https://static.bocoup.com/assets/img/bocoup-logo@2x.png" alt="Bocoup" width=135 height=40></a> $title</h1>
 <p>A <dfn>disabled</dfn> test is a test that is not run, maybe because it is flaky or because the feature it is testing is not yet implemented. For WebKit and Chromium, this is denoted as "[&nbsp;Skip&nbsp;]". For Mozilla and Edge, this is denoted as "disabled".
 <p>A <dfn>flaky</dfn> test is a test that gives inconsistent results, e.g., sometimes passing and sometimes failing. For Chromium and WebKit, this is denoted as "[&nbsp;Pass&nbsp;Failure&nbsp;]" (or other combinations of results).
@@ -166,91 +148,7 @@ html = Template("""<!doctype html>
 <!-- Graph is based on https://bl.ocks.org/mbostock/3884955 -->
 <svg width="960" height="500"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
-<script>
-var svg = d3.select("svg"),
-    margin = {top: 20, right: 80, bottom: 30, left: 50},
-    width = svg.attr("width") - margin.left - margin.right,
-    height = svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-var parseTime = d3.timeParse("%Y-%m-%d");
-
-var x = d3.scaleTime().range([0, width]),
-    y = d3.scalePow().exponent(0.5).range([height, 0]),
-    z = d3.scaleOrdinal(d3.schemeCategory10);
-
-var line = d3.line()
-    .curve(d3.curveBasis)
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.tests); });
-
-var pos = 0;
-function positionLegend() {
-  var labelWidth = 100;
-  pos += labelWidth;
-  return pos;
-}
-
-d3.csv("data.csv", type, function(error, data) {
-  if (error) throw error;
-
-  var groups = data.columns.slice(1).map(function(id) {
-    return {
-      id: id,
-      values: data.map(function(d) {
-        return {date: d.date, tests: d[id]};
-      })
-    };
-  });
-
-  x.domain(d3.extent(data, function(d) { return d.date; }));
-
-  y.domain([
-    d3.min(groups, function(c) { return d3.min(c.values, function(d) { return d.tests; }); }),
-    d3.max(groups, function(c) { return d3.max(c.values, function(d) { return d.tests; }); })
-  ]);
-
-  z.domain(groups.map(function(c) { return c.id; }));
-
-  g.append("g")
-      .attr("class", "axis axis--x")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
-
-  g.append("g")
-      .attr("class", "axis axis--y")
-      .call(d3.axisLeft(y))
-    .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", "0.71em")
-      .attr("fill", "#000")
-      .text("Tests");
-
-  var group = g.selectAll(".group")
-    .data(groups)
-    .enter().append("g")
-      .attr("class", "group");
-
-  group.append("path")
-      .attr("class", "line")
-      .attr("d", function(d) { return line(d.values); })
-      .style("stroke", function(d) { return z(d.id); });
-
-  group.append("text")
-      .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
-      .attr("transform", function(d) { return "translate(" + positionLegend() + ", " + (y(d.value.tests) - 5) + ")"; })
-      .style("font", "10px sans-serif")
-      .style("fill", function(d) { return z(d.id); })
-      .text(function(d) { return d.id; });
-});
-
-function type(d, _, columns) {
-  d.date = parseTime(d.date);
-  for (var i = 1, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
-  return d;
-}
-</script>
+<script src="static/graph.js"></script>
 <h2 id="4-browsers">4 browsers ($numRows4 tests)</h2>
 <table>
 $thead
@@ -295,25 +193,6 @@ $thead
 $disabledRows
 </table>
 </details>
-<script>
-const [flakyDetails, slowDetails, timeoutDetails, disabledDetails] = document.getElementsByTagName('details');
-
-onpageshow = e => {
-  flakyDetails.open = sessionStorage["flaky-tests-open"] === "true";
-  slowDetails.open = sessionStorage["slow-tests-open"] === "true";
-  timeoutDetails.open = sessionStorage["timeout-tests-open"] === "true";
-  disabledDetails.open = sessionStorage["disabled-tests-open"] === "true";
-  if (location.hash) {
-    const element = document.querySelector(location.hash);
-    if (element instanceof HTMLDetailsElement) {
-      element.open = true;
-    }
-  }
-}
-addEventListener('toggle', e => {
-  sessionStorage[e.target.id + "-open"] = String(e.target.open);
-}, true);
-</script>
 """)
 todayStr = date.today().isoformat()
 theadStr = "<tr><th>Path<th>Products<th>Results<th>Bugs<th>New issue"
