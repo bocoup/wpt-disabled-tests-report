@@ -194,6 +194,8 @@ def shortResult(item, products):
             arr.append("slow")
         else:
             arr.append("flaky")
+    # Remove duplicates
+    arr = list(set(arr))
     return "/".join(arr)
 
 for item in common:
