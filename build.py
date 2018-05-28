@@ -13,11 +13,11 @@ mozillaURL = "https://searchfox.org/mozilla-central/search?q=disabled%3A&case=tr
 mozillaBugzillaURL = "https://searchfox.org/mozilla-central/search?q=bugzilla&case=true&path=testing%2Fweb-platform%2Fmeta"
 chromiumURL = "https://cs.chromium.org/codesearch/f/chromium/src/third_party/WebKit/LayoutTests/TestExpectations"
 webkitURL = "https://raw.githubusercontent.com/WebKit/webkit/master/LayoutTests/TestExpectations"
-edgeXLSXURL = "https://github.com/w3c/web-platform-tests/files/1984479/NotRunFiles.xlsx"
-edgeHTMLURL = "https://github.com/w3c/web-platform-tests/issues/10655#issuecomment-387434035"
+edgeXLSXURL = "https://github.com/web-platform-tests/wpt/files/1984479/NotRunFiles.xlsx"
+edgeHTMLURL = "https://github.com/web-platform-tests/wpt/issues/10655#issuecomment-387434035"
 flakyQuery = "q=is%3Aissue+label%3Aflaky"
-wptAPIURL = "https://api.github.com/search/issues?" + flakyQuery + "+repo%3Aw3c/web-platform-tests"
-wptHTMLURL = "https://github.com/w3c/web-platform-tests/issues?utf8=%E2%9C%93&" + flakyQuery
+wptAPIURL = "https://api.github.com/search/issues?" + flakyQuery + "+repo%3Aweb-platform-tests/wpt"
+wptHTMLURL = "https://github.com/web-platform-tests/wpt/issues?utf8=%E2%9C%93&" + flakyQuery
 
 common = []
 
@@ -139,7 +139,7 @@ theadStr = "<tr><th>Path<th>Products<th>Results<th>Bugs<th>New issue"
 rowTemplate = Template("<tr><td>$path<td>$products<td>$results<td>$bugs<td>$newIssue")
 issueTitleTemplate = Template("$path is $results in $products")
 issueBodyTemplate = Template(open('templates/issue-body.md', 'r').read())
-newIssueTemplate = Template("""<a href="https://github.com/w3c/web-platform-tests/issues/new?title=$title&amp;body=$body&amp;labels=flaky" class="gh-button">New issue</a>""")
+newIssueTemplate = Template("""<a href="https://github.com/web-platform-tests/wpt/issues/new?title=$title&amp;body=$body&amp;labels=flaky" class="gh-button">New issue</a>""")
 
 def getProducts(item):
     products = []
