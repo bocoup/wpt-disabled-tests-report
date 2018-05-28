@@ -151,7 +151,11 @@ def getProducts(item):
 def link(url):
     if url is None:
         return "None"
-    return "<a href='https://%s'>%s</a>" % (url, url)
+    text = url.replace("bugzilla.mozilla.org/show_bug.cgi?id=", "mozilla #")
+    text = text.replace("crbug.com/", "chromium #")
+    text = text.replace("webkit.org/b/", "webkit #")
+    text = text.replace("github.com/web-platform-tests/wpt/issues/", "web-platform-tests #")
+    return "<a href='https://%s'>%s</a>" % (url, text)
 
 def githubLink(url):
     if url is None:
