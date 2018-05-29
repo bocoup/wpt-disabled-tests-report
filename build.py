@@ -201,22 +201,22 @@ for item in common:
         newIssue = ""
     else:
         issueTitle = issueTitleTemplate.substitute(path=item["path"],
-                                              results=shortResult(item, products),
-                                              products=" ".join(products)
-                                              )
+                                                   results=shortResult(item, products),
+                                                   products=" ".join(products),
+                                                   )
         issueBody = issueBodyTemplate.substitute(path=item["path"],
-                                            products=" ".join(products),
-                                            results=stringify(item, products, "results", " "),
-                                            bugs=stringify(item, products, "bug", " ")
-                                            )
+                                                 products=" ".join(products),
+                                                 results=stringify(item, products, "results", " "),
+                                                 bugs=stringify(item, products, "bug", " "),
+                                                 )
         newIssue = newIssueTemplate.substitute(title=urllib.parse.quote_plus(issueTitle),
-                                               body=urllib.parse.quote_plus(issueBody)
+                                               body=urllib.parse.quote_plus(issueBody),
                                                )
     row = rowTemplate.substitute(path=linkWPTFYI(item["path"]),
                                  products="<br>".join(products),
                                  results=stringify(item, products, "results", "<br>"),
                                  bugs=stringify(item, products, "bug", "<br>"),
-                                 newIssue=newIssue
+                                 newIssue=newIssue,
                                  )
     if num == 4:
         foundIn4.append(row)
