@@ -20,7 +20,9 @@ addEventListener('click', async function(e) {
     e.preventDefault();
     const path = target.parentNode.parentNode.firstElementChild.textContent;
     const authors = await getAuthors(path);
-    target.href = target.href.replace("%40zcorpan", "%40" + authors.join(" %40"));
+    if (authors.length) {
+      target.href = target.href.replace("%40zcorpan", "%40" + authors.join(" %40"));
+    }
     target.classList.add('has-authors');
     target.click();
   }
