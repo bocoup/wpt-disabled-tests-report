@@ -1,16 +1,33 @@
 (function() {
+  const filterInput = document.querySelector('#filter-input');
   const tables = Array.from(document.querySelectorAll('table'));
   const heading1Browser = document.getElementById('1-browser');
-  function filter(event) {
-    const input = event.target;
-    input.setCustomValidity('');
-    const value = input.value;
+  let pending = null;
+  function request(callback, ms) {
+    if (window.requestIdleCallback) {
+      pending = requestIdleCallback(callback, {timeout: ms});
+    } else {
+      pending = setTimeout(callback, ms)
+    }
+  }
+  function cancel(handle) {
+    (window.cancelIdleCallback || window.clearTimeout)(handle);
+  }
+  function queueFilter() {
+    if (pending) {
+      cancel(pending);
+    }
+    request(filter, 100);
+  }
+  function filter() {
+    filterInput.setCustomValidity('');
+    const value = filterInput.value;
     let re;
     try {
-      re = new RegExp(value);
+      re = new RegExp(value, 'i');
     } catch(e) {
-      input.setCustomValidity(e);
-      input.reportValidity();
+      filterInput.setCustomValidity(e);
+      filterInput.reportValidity();
       return;
     }
     let count1Browser = 0;
@@ -34,8 +51,7 @@
     heading1Browser.textContent = heading1Browser.textContent.replace(/\(\d+/, "(" + count1Browser);
     history.replaceState(null, document.title, value ? '#filter=' + value : location.pathname);
   }
-  const filterInput = document.querySelector('#filter-input');
-  filterInput.oninput = filter;
+  filterInput.oninput = queueFilter;
   if (location.hash.indexOf('#filter=') != -1) {
     filterInput.value = location.hash.match(/^\#filter=(.*)$/)[1];
     filter({target: filterInput});
