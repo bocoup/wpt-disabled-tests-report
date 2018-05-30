@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="static/style.css">
 <script src="static/get-authors.js" async></script>
 <script src="static/details.js" defer></script>
+<script src="static/filter.js" defer></script>
 <h1><a href="https://bocoup.com/"><img src="https://static.bocoup.com/assets/img/bocoup-logo@2x.png" alt="Bocoup" width=135 height=40></a> $title</h1>
 <p>A <dfn>disabled</dfn> test is a test that is not run, maybe because it is flaky or because the feature it is testing is not yet implemented. For WebKit and Chromium, this is denoted as "[&nbsp;Skip&nbsp;]". For Mozilla and Edge, this is denoted as "disabled".
 <p>A <dfn>flaky</dfn> test is a test that gives inconsistent results, e.g., sometimes passing and sometimes failing. For Chromium and WebKit, this is denoted as "[&nbsp;Pass&nbsp;Failure&nbsp;]" (or other combinations of results).
@@ -18,6 +19,7 @@
 <svg width="960" height="500"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="static/graph.js"></script>
+<p><label>Filter: <input id="filter-input"></label></p>
 <h2 id="4-browsers">4 browsers ($numRows4 tests)</h2>
 <table>
 $thead
