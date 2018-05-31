@@ -189,7 +189,7 @@ def shortResult(item, products):
     arr = []
     for product in products:
         result = item[product]["results"]
-        if result.find("disabled") != -1 or result == "[ Skip ]":
+        if result.find("disabled") != -1 or result == "[ Skip ]" or result == "[ WontFix ]":
             arr.append("disabled")
         elif result == "[ Slow ]" or result == "[ Timeout ]":
             arr.append("slow")
@@ -230,13 +230,13 @@ for item in common:
     if num == 2:
         foundIn2.append(row)
     if num == 1:
-        match = re.search(r"(\[ (Slow|Timeout|Skip) \]|disabled)", item[products[0]]["results"])
+        match = re.search(r"(\[ (Slow|Timeout|Skip|WontFix) \]|disabled)", item[products[0]]["results"])
         if match:
             if match.group(0) == "[ Slow ]":
                 slowRows.append(row)
             elif match.group(0) == "[ Timeout ]":
                 timeoutRows.append(row)
-            elif match.group(0) == "disabled" or match.group(0) == "[ Skip ]":
+            elif match.group(0) == "disabled" or match.group(0) == "[ Skip ]" or match.group(0) == "[ WontFix ]":
                 disabledRows.append(row)
             else:
                raise Exception(row)
