@@ -35,8 +35,7 @@
       const trs = table.querySelectorAll('tr');
       let count = 0;
       for (let i = 1; i < trs.length; i++) {
-        const path = trs[i].firstElementChild.firstElementChild.firstChild.data;
-        const match = re.test(path);
+        const match = re.test(trs[i].textContent);
         trs[i].hidden = !match;
         if (match) {
           count++;
