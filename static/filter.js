@@ -19,7 +19,8 @@
     }
     request(filter, 100);
   }
-  function filter() {
+  function filter(skipHashUpdate) {
+    pending = null;
     filterInput.setCustomValidity('');
     const value = filterInput.value;
     let re;
@@ -48,11 +49,11 @@
       }
     }
     heading1Browser.textContent = heading1Browser.textContent.replace(/\(\d+/, "(" + count1Browser);
-    history.replaceState(null, document.title, value ? '#filter=' + value : location.pathname);
+    history.replaceState(null, document.title, value ? '#filter=' + encodeURIComponent(value) : location.pathname);
   }
   filterInput.oninput = queueFilter;
   if (location.hash.indexOf('#filter=') != -1) {
-    filterInput.value = location.hash.match(/^\#filter=(.*)$/)[1];
-    filter({target: filterInput});
+    filterInput.value = decodeURIComponent(location.hash.match(/^\#filter=(.*)$/)[1]);
+    filter();
   }
 })();
