@@ -33,6 +33,9 @@
     }
     let count1Browser = 0;
     for (const table of tables) {
+      if (!table.hasAttribute('class')) {
+        table.className = 'filtered';
+      }
       const trs = table.querySelectorAll('tr');
       let count = 0;
       for (let i = 1; i < trs.length; i++) {
@@ -40,6 +43,8 @@
         trs[i].hidden = !match;
         if (match) {
           count++;
+          // even/odd is off by 1 because the header row is skipped
+          trs[i].className = count % 2 == 0 ? '' : 'even';
         }
       }
       const prev = table.previousElementSibling;
