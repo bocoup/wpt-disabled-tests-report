@@ -11,17 +11,14 @@
 <p>A <dfn>flaky</dfn> test is a test that gives inconsistent results, e.g., sometimes passing and sometimes failing. For Chromium and WebKit, this is denoted as "[&nbsp;Pass&nbsp;Failure&nbsp;]" (or other combinations of results).
 <p>A <dfn>slow</dfn> test is a test that is marked as taking a long time to run. For Chromium and WebKit, this is denoted as "[&nbsp;Slow&nbsp;]".
 <p>The tables below show all tests in <a href="https://github.com/web-platform-tests/wpt">web-platform-tests</a> that are disabled, flaky, or slow, in 4, 3, 2, and 1 browsers. Tests that show up for more than one browser are likely to be due to issues with the tests.
-<p>This report is generated from <a href="$mozillaURL">this search result for Mozilla</a>, <a href="$chromiumURL">this TestExpectations file</a> and <a href="$chromiumNeverFixTestsURL">this NeverFixTests file for Chromium</a>, <a href="$webkitURL">this TestExpectations file for WebKit</a>, <a href="$edgeHTMLURL">this NotRunFiles.xslx file for Edge</a>, and <a href="$wptHTMLURL">this search result in web-platform-tests</a>.
+<p>This report is generated from <a href="$mozillaURL">this search result for Mozilla</a>, <a href="$chromiumURL">this TestExpectations file for Chromium</a>, <a href="$webkitURL">this TestExpectations file for WebKit</a>, <a href="$edgeHTMLURL">this NotRunFiles.xslx file for Edge</a>, and <a href="$wptHTMLURL">this search result in web-platform-tests</a>.
 <p>Generated on $date. <a href="https://github.com/bocoup/wpt-disabled-tests-report">Source on GitHub</a> (<a href="https://github.com/bocoup/wpt-disabled-tests-report/issues">issues/feedback</a>). Data is also available in <a href="common.json">JSON format</a>.
 <p>Also see <a href="https://github.com/web-platform-tests/wpt/pulls?q=is%3Apr+label%3Aflaky">PRs with the <span class="flaky gh-label">flaky</span> label</a>, which represent work to fix tests in this report.
 <p>The graph below shows changes of number of tests over time (<a href="data.csv">CSV format</a>).</p>
-<figure>
- <!-- Graph is based on https://bl.ocks.org/mbostock/3884955 -->
- <svg width="960" height="500"></svg>
- <script src="https://d3js.org/d3.v4.min.js"></script>
- <script src="static/graph.js"></script>
- <figcaption>Note: The spike on 2018-05-31 is because the the NeverFixTests file for Chromium was added.</figcaption>
-</figure>
+<!-- Graph is based on https://bl.ocks.org/mbostock/3884955 -->
+<svg width="960" height="500"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="static/graph.js"></script>
 <p><label>Filter: <input id="filter-input"></label></p>
 <h2 id="4-browsers">4 browsers ($numRows4 tests)</h2>
 <table>
