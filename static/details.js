@@ -6,8 +6,8 @@ onpageshow = e => {
   timeoutDetails.open = sessionStorage["timeout-tests-open"] === "true";
   disabledDetails.open = sessionStorage["disabled-tests-open"] === "true";
   if (location.hash) {
-    const element = document.querySelector(location.hash);
-    if (element && element instanceof HTMLDetailsElement) {
+    if (/^#(flaky|slow|timeout|disabled)-tests$/.test(location.hash)) {
+      const element = document.querySelector(location.hash);
       element.open = true;
     }
   }
