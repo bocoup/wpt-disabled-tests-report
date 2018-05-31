@@ -12,6 +12,7 @@ import urllib
 mozillaURL = "https://searchfox.org/mozilla-central/search?q=disabled%3A&case=true&regexp=false&path=testing%2Fweb-platform%2Fmeta"
 mozillaBugzillaURL = "https://searchfox.org/mozilla-central/search?q=bugzilla&case=true&path=testing%2Fweb-platform%2Fmeta"
 chromiumURL = "https://cs.chromium.org/codesearch/f/chromium/src/third_party/WebKit/LayoutTests/TestExpectations"
+chromiumNeverFixTestsURL = "https://cs.chromium.org/codesearch/f/chromium/src/third_party/WebKit/LayoutTests/NeverFixTests"
 webkitURL = "https://raw.githubusercontent.com/WebKit/webkit/master/LayoutTests/TestExpectations"
 edgeXLSXURL = "https://github.com/web-platform-tests/wpt/files/1984479/NotRunFiles.xlsx"
 edgeHTMLURL = "https://github.com/web-platform-tests/wpt/issues/10655#issuecomment-387434035"
@@ -92,6 +93,10 @@ def extractFromTestExpectations(url, wptPrefix, product):
 
 # Chromium
 extractFromTestExpectations(chromiumURL,
+                            b"external/wpt/",
+                            "chromium")
+
+extractFromTestExpectations(chromiumNeverFixTestsURL,
                             b"external/wpt/",
                             "chromium")
 
@@ -184,7 +189,7 @@ def shortResult(item, products):
     arr = []
     for product in products:
         result = item[product]["results"]
-        if result.find("disabled") != -1 or result == "[ Skip ]":
+        if result.find("disabled") != -1 or result == "[ Skip ]" or result == "[ WontFix ]":
             arr.append("disabled")
         elif result == "[ Slow ]" or result == "[ Timeout ]":
             arr.append("slow")
@@ -225,13 +230,13 @@ for item in common:
     if num == 2:
         foundIn2.append(row)
     if num == 1:
-        match = re.search(r"(\[ (Slow|Timeout|Skip) \]|disabled)", item[products[0]]["results"])
+        match = re.search(r"(\[ (Slow|Timeout|Skip|WontFix) \]|disabled)", item[products[0]]["results"])
         if match:
             if match.group(0) == "[ Slow ]":
                 slowRows.append(row)
             elif match.group(0) == "[ Timeout ]":
                 timeoutRows.append(row)
-            elif match.group(0) == "disabled" or match.group(0) == "[ Skip ]":
+            elif match.group(0) == "disabled" or match.group(0) == "[ Skip ]" or match.group(0) == "[ WontFix ]":
                 disabledRows.append(row)
             else:
                raise Exception(row)
@@ -250,6 +255,7 @@ numRows1 = flakyNum + slowNum + timeoutNum + disabledNum
 outHTML = htmlTemplate.substitute(title="Disabled/flaky/slow web-platform-tests Report",
                                   mozillaURL=html.escape(mozillaURL),
                                   chromiumURL=html.escape(chromiumURL),
+                                  chromiumNeverFixTestsURL=html.escape(chromiumNeverFixTestsURL),
                                   webkitURL=html.escape(webkitURL),
                                   edgeHTMLURL=html.escape(edgeHTMLURL),
                                   wptHTMLURL=html.escape(wptHTMLURL),
