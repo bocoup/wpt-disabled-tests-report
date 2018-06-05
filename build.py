@@ -8,6 +8,7 @@ from datetime import date
 import xlrd
 import html
 import urllib
+import time
 
 mozillaURL = "https://searchfox.org/mozilla-central/search?q=disabled%3A&case=true&regexp=false&path=testing%2Fweb-platform%2Fmeta"
 mozillaBugzillaURL = "https://searchfox.org/mozilla-central/search?q=bugzilla&case=true&path=testing%2Fweb-platform%2Fmeta"
@@ -21,6 +22,24 @@ wptAPIURL = "https://api.github.com/search/issues?" + flakyQuery + "+repo%3Aweb-
 wptHTMLURL = "https://github.com/web-platform-tests/wpt/issues?utf8=%E2%9C%93&" + flakyQuery
 
 common = []
+
+# Retry fetching if it fails
+def fetchWithRetry(url):
+    remaining = 5
+    sleep = 0
+    response = None
+    while remaining > 0:
+        try:
+            response = urllib.request.urlopen(url)
+            break
+        except:
+            sleep += 1
+            remaining -= 1
+            time.sleep(sleep)
+            continue
+    if response:
+        return response
+    raise Exception("Gave up fetching " + url)
 
 # Add path to common, merging with existing if present
 def addPath(bug, path, results, product, onlyBug = False):
@@ -43,7 +62,7 @@ def addPath(bug, path, results, product, onlyBug = False):
 
 # Mozilla
 def scrapeSearchFox(url, isBugzillaSearch = False):
-    contents = urllib.request.urlopen(url).readlines()
+    contents = fetchWithRetry(url).readlines()
     # Extract the data, it's on a single line after a "<script>" line
     foundScript = False
     for line in contents:
@@ -71,7 +90,7 @@ scrapeSearchFox(mozillaBugzillaURL, True)
 
 # Fetch and parse TestExpectations file
 def extractFromTestExpectations(url, wptPrefix, product):
-    contents = urllib.request.urlopen(url).readlines()
+    contents = fetchWithRetry(url).readlines()
     for line in contents:
         if line[0:1] == b"#":
             continue
@@ -106,7 +125,7 @@ extractFromTestExpectations(webkitURL,
                             "webkit")
 
 # EdgeHTML
-xlsx = urllib.request.urlopen(edgeXLSXURL).read()
+xlsx = fetchWithRetry(edgeXLSXURL).read()
 workbook = xlrd.open_workbook(filename="NotRunFiles.xlsx", file_contents=xlsx)
 sheet = workbook.sheet_by_name('NotRunFiles')
 for rownum in range(sheet.nrows):
@@ -116,7 +135,7 @@ for rownum in range(sheet.nrows):
     addPath(None, "/" + "/".join(sheet.row_values(rownum)), "disabled", "edge")
 
 # web-platform-tests issues
-wptIssues = json.loads(urllib.request.urlopen(wptAPIURL).read())["items"]
+wptIssues = json.loads(fetchWithRetry(wptAPIURL).read())["items"]
 for item in wptIssues:
     match = re.search(r"^(/[^ ]+) (?:is|are) (?:disabled|flaky|slow)", item["title"])
     if match == None:
