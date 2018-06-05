@@ -140,8 +140,8 @@ disabledRows = []
 
 htmlTemplate = Template(open('templates/index.html', 'r').read())
 todayStr = date.today().isoformat()
-theadStr = "<tr><th>Path<th>Products<th>Results<th>Bugs<th>New issue"
-rowTemplate = Template("<tr><td>$path<td>$products<td>$results<td>$bugs<td>$newIssue")
+theadStr = "<tr><th>Path<th>Products<th>Results<th>Bugs<th>New issue</tr>"
+rowTemplate = Template("<tr><td>$path<td> $products<td> $results<td> $bugs<td> $newIssue</tr>")
 issueTitleTemplate = Template("$path is $results in $products")
 issueBodyTemplate = Template(open('templates/issue-body.md', 'r').read())
 newIssueTemplate = Template("""<a href="https://github.com/web-platform-tests/wpt/issues/new?title=$title&amp;body=$body&amp;labels=flaky" class="gh-button">New issue</a>""")
@@ -174,7 +174,7 @@ def stringify(item, products, property, joiner):
     arr = []
     for product in products:
         if property == "bug":
-            if joiner == "<br>":
+            if joiner == "<br> ":
                 arr.append(link(item[product][property]))
             else:
                 arr.append(githubLink(item[product][property]))
@@ -218,9 +218,9 @@ for item in common:
                                                body=urllib.parse.quote_plus(issueBody),
                                                )
     row = rowTemplate.substitute(path=linkWPTFYI(item["path"]),
-                                 products="<br>".join(products),
-                                 results=stringify(item, products, "results", "<br>"),
-                                 bugs=stringify(item, products, "bug", "<br>"),
+                                 products="<br> ".join(products),
+                                 results=stringify(item, products, "results", "<br> "),
+                                 bugs=stringify(item, products, "bug", "<br> "),
                                  newIssue=newIssue,
                                  )
     if num == 4:
