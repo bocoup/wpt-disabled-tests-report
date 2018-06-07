@@ -164,6 +164,10 @@ rowTemplate = Template("<tr><td>$path<td> $products<td> $results<td> $bugs<td> $
 issueTitleTemplate = Template("$path is $results in $products")
 issueBodyTemplate = Template(open('templates/issue-body.md', 'r').read())
 newIssueTemplate = Template("""<a href="https://github.com/web-platform-tests/wpt/issues/new?title=$title&amp;body=$body&amp;labels=flaky" class="gh-button">New issue</a>""")
+linkPathTemplate = Template("<a href='https://wpt.fyi$path'>$path</a><br><small>$dashboards</small>")
+dashboardsTemplate = Template("Test result history for: " + \
+                            "<a href='https://test-results.appspot.com/dashboards/flakiness_dashboard.html#testType=webkit_layout_tests&amp;tests=external/wpt$path'>chromium</a>, " + \
+                            "<a href='https://webkit-test-results.webkit.org/dashboards/flakiness_dashboard.html#tests=imported/w3c/web-platform-tests$path'>webkit</a>")
 
 def getProducts(item):
     products = []
@@ -186,8 +190,9 @@ def githubLink(url):
         return "None"
     return "https://%s" % url
 
-def linkWPTFYI(path):
-    return "<a href='https://wpt.fyi%s'>%s</a>" % (path, path)
+def linkPath(path):
+    dashboards = dashboardsTemplate.substitute(path=path)
+    return linkPathTemplate.substitute(path=path, dashboards=dashboards)
 
 def stringify(item, products, property, joiner):
     arr = []
@@ -228,15 +233,17 @@ for item in common:
                                                    results=shortResult(item, products),
                                                    products=" ".join(products),
                                                    )
+        dashboards = dashboardsTemplate.substitute(path=item["path"])
         issueBody = issueBodyTemplate.substitute(path=item["path"],
                                                  products=" ".join(products),
                                                  results=stringify(item, products, "results", " "),
                                                  bugs=stringify(item, products, "bug", " "),
+                                                 dashboards=dashboards,
                                                  )
         newIssue = newIssueTemplate.substitute(title=urllib.parse.quote_plus(issueTitle),
                                                body=urllib.parse.quote_plus(issueBody),
                                                )
-    row = rowTemplate.substitute(path=linkWPTFYI(item["path"]),
+    row = rowTemplate.substitute(path=linkPath(item["path"]),
                                  products="<br> ".join(products),
                                  results=stringify(item, products, "results", "<br> "),
                                  bugs=stringify(item, products, "bug", "<br> "),

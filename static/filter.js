@@ -39,7 +39,8 @@
       const trs = table.querySelectorAll('tr');
       let count = 0;
       for (let i = 1; i < trs.length; i++) {
-        const match = re.test(trs[i].textContent);
+        const text = Array.from(trs[i].querySelectorAll('td > :not(small)')).map(node => node.textContent).join("");
+        const match = re.test(text);
         trs[i].hidden = !match;
         if (match) {
           count++;
