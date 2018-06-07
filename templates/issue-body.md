@@ -6,4 +6,6 @@ Path | Products | Results | Bugs
 -- | -- | -- | --
 $path | $products | $results | $bugs
 
+$dashboards
+
 cc @zcorpan
