@@ -39,7 +39,16 @@
       const trs = table.querySelectorAll('tr');
       let count = 0;
       for (let i = 1; i < trs.length; i++) {
-        const text = Array.from(trs[i].querySelectorAll('td > :not(small)')).map(node => node.textContent).join("");
+        const text = Array.from(trs[i].children).map(td => {
+          let rv = "";
+          for (const child of td.childNodes) {
+            if (child.localName === "small") {
+              continue;
+            }
+            rv += child.textContent;
+          }
+          return rv;
+        }).join("");
         const match = re.test(text);
         trs[i].hidden = !match;
         if (match) {
