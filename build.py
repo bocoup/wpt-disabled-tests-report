@@ -30,7 +30,6 @@ def fetchWithRetry(url):
     response = None
     while remaining > 0:
         try:
-            raise Exception("x")
             response = urllib.request.urlopen(url)
             break
         except:
