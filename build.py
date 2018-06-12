@@ -25,15 +25,15 @@ common = []
 
 # Retry fetching if it fails
 def fetchWithRetry(url):
-    remaining = 5
-    sleep = 0
+    remaining = 4
+    sleep = 1
     response = None
     while remaining > 0:
         try:
             response = urllib.request.urlopen(url)
             break
         except:
-            sleep += 1
+            sleep *= 3
             remaining -= 1
             time.sleep(sleep)
             continue
