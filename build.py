@@ -14,6 +14,7 @@ mozillaURL = "https://searchfox.org/mozilla-central/search?q=disabled%3A&case=tr
 mozillaBugzillaURL = "https://searchfox.org/mozilla-central/search?q=bugzilla&case=true&path=testing%2Fweb-platform%2Fmeta"
 chromiumURL = "https://cs.chromium.org/codesearch/f/chromium/src/third_party/WebKit/LayoutTests/TestExpectations"
 chromiumNeverFixTestsURL = "https://cs.chromium.org/codesearch/f/chromium/src/third_party/WebKit/LayoutTests/NeverFixTests"
+chromiumSlowTestsURL = "https://cs.chromium.org/codesearch/f/chromium/src/third_party/WebKit/LayoutTests/SlowTests"
 webkitURL = "https://raw.githubusercontent.com/WebKit/webkit/master/LayoutTests/TestExpectations"
 edgeXLSXURL = "https://github.com/web-platform-tests/wpt/files/1984479/NotRunFiles.xlsx"
 edgeHTMLURL = "https://github.com/web-platform-tests/wpt/issues/10655#issuecomment-387434035"
@@ -116,6 +117,10 @@ extractFromTestExpectations(chromiumURL,
                             "chromium")
 
 extractFromTestExpectations(chromiumNeverFixTestsURL,
+                            b"external/wpt/",
+                            "chromium")
+
+extractFromTestExpectations(chromiumSlowTestsURL,
                             b"external/wpt/",
                             "chromium")
 
@@ -282,6 +287,7 @@ outHTML = htmlTemplate.substitute(title="Disabled/flaky/slow web-platform-tests 
                                   mozillaURL=html.escape(mozillaURL),
                                   chromiumURL=html.escape(chromiumURL),
                                   chromiumNeverFixTestsURL=html.escape(chromiumNeverFixTestsURL),
+                                  chromiumSlowTestsURL=html.escape(chromiumSlowTestsURL),
                                   webkitURL=html.escape(webkitURL),
                                   edgeHTMLURL=html.escape(edgeHTMLURL),
                                   wptHTMLURL=html.escape(wptHTMLURL),
