@@ -287,6 +287,7 @@ outHTML = htmlTemplate.substitute(title="Disabled/flaky/slow web-platform-tests 
                                   mozillaURL=html.escape(mozillaURL),
                                   chromiumURL=html.escape(chromiumURL),
                                   chromiumNeverFixTestsURL=html.escape(chromiumNeverFixTestsURL),
+                                  chromiumSlowTestsURL=html.escape(chromiumSlowTestsURL),
                                   webkitURL=html.escape(webkitURL),
                                   edgeHTMLURL=html.escape(edgeHTMLURL),
                                   wptHTMLURL=html.escape(wptHTMLURL),
