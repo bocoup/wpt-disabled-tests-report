@@ -81,7 +81,7 @@ def scrapeSearchFox(url, isBugzillaSearch = False):
         values = line.split(' https://')
         results = values.pop(0)
         if len(values) > 0:
-            bug = values[0]
+            bug = values[0].split(' ')[0]
         else:
             bug = None
         addPath(bug, item["path"].replace("testing/web-platform/meta", "").replace(".ini", ""), results, "mozilla", isBugzillaSearch)
