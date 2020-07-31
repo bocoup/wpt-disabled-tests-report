@@ -12,9 +12,9 @@ import time
 
 mozillaURL = "https://searchfox.org/mozilla-central/search?q=disabled%3A&case=true&regexp=false&path=testing%2Fweb-platform%2Fmeta"
 mozillaBugzillaURL = "https://searchfox.org/mozilla-central/search?q=bugzilla&case=true&path=testing%2Fweb-platform%2Fmeta"
-chromiumURL = "https://cs.chromium.org/codesearch/f/chromium/src/third_party/blink/web_tests/TestExpectations"
-chromiumNeverFixTestsURL = "https://cs.chromium.org/codesearch/f/chromium/src/third_party/blink/web_tests/NeverFixTests"
-chromiumSlowTestsURL = "https://cs.chromium.org/codesearch/f/chromium/src/third_party/blink/web_tests/SlowTests"
+chromiumURL = "https://raw.githubusercontent.com/chromium/chromium/master/third_party/blink/web_tests/TestExpectations"
+chromiumNeverFixTestsURL = "https://raw.githubusercontent.com/chromium/chromium/master/third_party/blink/web_tests/NeverFixTests"
+chromiumSlowTestsURL = "https://raw.githubusercontent.com/chromium/chromium/master/third_party/blink/web_tests/SlowTests"
 webkitURL = "https://raw.githubusercontent.com/WebKit/webkit/master/LayoutTests/TestExpectations"
 edgeXLSXURL = "https://github.com/web-platform-tests/wpt/files/1984479/NotRunFiles.xlsx"
 edgeHTMLURL = "https://github.com/web-platform-tests/wpt/issues/10655#issuecomment-387434035"
